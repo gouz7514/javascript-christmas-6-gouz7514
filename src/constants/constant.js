@@ -7,3 +7,5 @@ export const DELIMITER = {
   order: ",",
   menu: "-",
 };
+
+export const GIVEAWAY = 120000;
