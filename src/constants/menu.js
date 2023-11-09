@@ -55,3 +55,8 @@ export const MENU = {
     type: MENU_TYPE.drink,
   },
 };
+
+export const MENU_COUNT = {
+  min: 1,
+  max: 20,
+};
