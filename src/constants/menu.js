@@ -1,8 +1,3 @@
-export const MENU_SPLIT = {
-  menu: ",",
-  count: "-",
-};
-
 export const MENU_TYPE = {
   appetizer: "appetizer",
   main: "main",
