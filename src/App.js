@@ -11,18 +11,18 @@ class App {
   }
 
   async run() {
-    const date = await this.getDate();
+    const date = await this.readDate();
     Console.print(date);
   }
 
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
-  async getDate() {
+  async readDate() {
     try {
       const date = InputValidator.validateDate(await this.inputView.readDate());
       return date;
     } catch (error) {
       OutputView.printError(error.message);
-      return this.getDate();
+      return this.readDate();
     }
   }
 }
