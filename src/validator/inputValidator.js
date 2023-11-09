@@ -1,6 +1,6 @@
 import { DATE } from "../constants/constant.js";
 import { ERROR } from "../constants/error.js";
-import { MENU_SPLIT } from "../constants/menu.js";
+import { MENU, MENU_SPLIT } from "../constants/menu.js";
 
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
@@ -16,6 +16,8 @@ export default class InputValidator {
   static validateMenu(menus) {
     const menuArray = menus.split(MENU_SPLIT.menu);
     this.isValidMenuFormat(menuArray);
+    this.isValidMenu(menuArray);
+    return menus;
   }
 
   static isNumber(value) {
@@ -39,6 +41,16 @@ export default class InputValidator {
       const isNameString = REGEX_STRING.test(menuName);
       const isCountNumber = REGEX_NUMBER.test(menuCount) && Number.isSafeInteger(Number(menuCount));
       if (!isNameString || !isCountNumber) {
+        this.throwMenuError();
+      }
+    });
+  }
+
+  // 1-2-2. 메뉴판에 없는 메뉴의 경우, 예외를 발생시킨다.
+  static isValidMenu(menus) {
+    menus.forEach((menu) => {
+      const menuName = menu.split(MENU_SPLIT.count)[0];
+      if (!MENU[menuName]) {
         this.throwMenuError();
       }
     });
