@@ -9,29 +9,29 @@ class App {
   }
 
   async run() {
-    await this.readDate();
-    await this.readMenu();
+    await this.getVisitDate();
+    await this.getOrders();
   }
 
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
-  async readDate() {
+  async getVisitDate() {
     try {
-      const date = InputValidator.validateDate(await this.inputView.readDate());
+      const date = InputValidator.validateVisitDate(await this.inputView.getVisitDate());
       return date;
     } catch (error) {
       OutputView.printError(error.message);
-      return this.readDate();
+      return this.getVisitDate();
     }
   }
 
   // 1-2. 고객의 메뉴를 입력받는다.
-  async readMenu() {
+  async getOrders() {
     try {
-      const menu = InputValidator.validateMenu(await this.inputView.readMenu());
+      const menu = InputValidator.validateOrders(await this.inputView.getOrders());
       return menu;
     } catch (error) {
       OutputView.printError(error.message);
-      return this.readMenu();
+      return this.getOrders();
     }
   }
 }
