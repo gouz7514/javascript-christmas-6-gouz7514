@@ -12,7 +12,7 @@ export default class InputValidator {
 
   static #menuDelimiter = "-";
 
-  // 1-1-1. 숫자로만, 1 이상 31 이하, 이외의 입력값은 예외를 발생시킨다.
+  // 1-1-1. 날짜는 1 이상 31 이하의 숫자여야만 한다.
   static validateVisitDate(date) {
     this.isNumber(date);
     this.isValidDate(date);
@@ -40,7 +40,7 @@ export default class InputValidator {
     }
   }
 
-  // 1-2-1. 메뉴 형식이 예시와 다른 경우, 예외를 발생시킨다.
+  // 1-2-1. 메뉴 형식은 예시와 같아야 한다.
   static isValidOrderFormat(orders) {
     orders.forEach((order) => {
       const [menuName, menuCount] = order.split(this.#menuDelimiter);
@@ -52,7 +52,7 @@ export default class InputValidator {
     });
   }
 
-  // 1-2-2. 메뉴판에 없는 메뉴의 경우, 예외를 발생시킨다.
+  // 1-2-2. 메뉴판에 있는 메뉴여야만 한다.
   static isValidOrder(orders) {
     orders.forEach((order) => {
       const menuName = order.split(this.#menuDelimiter)[0];
