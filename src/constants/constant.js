@@ -1,4 +1,4 @@
-import { MENU_TYPE } from "./menu.js";
+import { MENU_TYPE, MENU } from "./menu.js";
 
 export const DATE = {
   start: 1,
@@ -36,6 +36,11 @@ export const BENEFIT = {
   special: {
     type: 'special',
     discount: 1000,
+  },
+  giveAway: {
+    type: 'giveAway',
+    discount: MENU['샴페인'].price,
+    amount: 1,
   },
 };
 

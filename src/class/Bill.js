@@ -43,6 +43,7 @@ class Bill {
     }
     this.calculateDayBenefits(visitDate, orders);
     this.calculateSpecialBenefits(visitDate);
+    this.calculateGiveAwayBenefits(this.#info.giveAway);
   }
 
   // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
@@ -110,6 +111,17 @@ class Bill {
   calculateSpecialBenefits(visitDate) {
     if (DATE.special.includes(visitDate)) {
       const benefit = BENEFIT.special;
+      this.#info.benefits.push(benefit);
+    }
+  }
+
+  // 2-3-4. 증정 메뉴 금액을 계산한다.
+  calculateGiveAwayBenefits(giveAway) {
+    if (giveAway) {
+      const benefit = {
+        type: BENEFIT.giveAway.type,
+        discount: BENEFIT.giveAway.discount * BENEFIT.giveAway.amount,
+      };
       this.#info.benefits.push(benefit);
     }
   }
