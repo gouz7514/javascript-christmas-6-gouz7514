@@ -20,6 +20,7 @@ class Bill {
     this.#info.giveAway = this.calculateGiveAway(this.#info.totalPrice);
     this.calculateBenefits(visitDate, orders);
     this.#info.benefitAmount = this.calculateBenefitAmount(this.#info.benefits, this.#info.giveAway);
+    this.#info.finalPrice = this.calculateFinalPrice(this.#info.totalPrice, this.#info.benefits);
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
@@ -155,6 +156,11 @@ class Bill {
       return BENEFIT.giveAway.discount;
     }
     return 0;
+  }
+
+  // 2-5. 할인 후 예상 결제 금액을 계산한다.
+  calculateFinalPrice(totalPrice, benefits) {
+    return totalPrice - this.calculateBenefitDiscount(benefits);
   }
 }
 
