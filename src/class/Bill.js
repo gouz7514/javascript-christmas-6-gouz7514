@@ -13,16 +13,17 @@ class Bill {
 
   createBill(orders) {
     this.#info.orders = orders;
-
-    this.calculateTotalPrice(orders);
+    this.#info.totalPrice = this.calculateTotalPrice(orders);
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
   calculateTotalPrice(orders) {
+    let totalPrice = 0;
     orders.forEach((order) => {
-      const { name, count } = order;
-      this.#info.totalPrice += MENU[name].price * count;
+      const [menu, count] = order.split("-");
+      totalPrice += MENU[menu] * count;
     });
+    return totalPrice;
   }
 }
 
