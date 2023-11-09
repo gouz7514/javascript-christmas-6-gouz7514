@@ -9,6 +9,7 @@ export const DATE = {
   },
   weekDay: [0, 1, 2, 3, 4],
   weekend: [5, 6],
+  special: [3, 10, 17, 24, 25, 31],
 };
 
 export const EVENT = {
@@ -18,19 +19,23 @@ export const EVENT = {
 
 export const BENEFIT = {
   christmas: {
+    type: 'christmas',
     startPrice: 1000,
     dayPrice: 100,
-    type: 'christmas',
   },
   weekDay: {
+    type: 'weekDay',
     menuType: MENU_TYPE.dessert,
     discount: 2023,
-    type: 'weekDay',
   },
   weekEnd: {
+    type: 'weekEnd',
     menuType: MENU_TYPE.main,
     discount: 2023,
-    type: 'weekEnd',
+  },
+  special: {
+    type: 'special',
+    discount: 1000,
   },
 };
 
