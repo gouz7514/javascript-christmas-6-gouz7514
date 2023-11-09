@@ -5,8 +5,6 @@ import { MENU, MENU_COUNT } from "../constants/menu.js";
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
 
-const checkNumber = (value) => REGEX_NUMBER.test(value) && Number.isSafeInteger(Number(value));
-
 export default class InputValidator {
   // 1-1-1. 날짜는 1 이상 31 이하의 숫자여야만 한다.
   static validateVisitDate(date) {
@@ -26,7 +24,7 @@ export default class InputValidator {
   }
 
   static isNumber(value) {
-    const isValid = checkNumber(value);
+    const isValid = this.checkNumber(value);
     if (!isValid) {
       this.throwDateError();
     }
@@ -43,8 +41,8 @@ export default class InputValidator {
   static isValidOrderFormat(orders) {
     orders.forEach((order) => {
       const [menuName, menuCount] = order.split(DELIMITER.menu);
-      const isNameString = REGEX_STRING.test(menuName);
-      const isCountNumber = checkNumber(menuCount);
+      const isNameString = this.checkString(menuName);
+      const isCountNumber = this.checkNumber(menuCount);
       if (!isNameString || !isCountNumber) {
         this.throwMenuError();
       }
@@ -65,7 +63,7 @@ export default class InputValidator {
   static isValidMenuCount(orders) {
     orders.forEach((order) => {
       const menuCount = order.split(DELIMITER.menu)[1];
-      const isValid = checkNumber(menuCount) && Number(menuCount) >= MENU_COUNT.min;
+      const isValid = this.checkNumber(menuCount) && Number(menuCount) >= MENU_COUNT.min;
       if (!isValid) {
         this.throwMenuError();
       }
@@ -95,6 +93,16 @@ export default class InputValidator {
     if (!isValid) {
       this.throwMenuError();
     }
+  }
+
+  static checkString(value) {
+    const isValid = REGEX_STRING.test(value);
+    return isValid;
+  }
+
+  static checkNumber(value) {
+    const isValid = REGEX_NUMBER.test(value) && Number.isSafeInteger(Number(value));
+    return isValid;
   }
 
   static throwDateError() {
