@@ -12,6 +12,8 @@ export default class InputValidator {
 
   static #menuDelimiter = "-";
 
+  static #minMenuCount = 1;
+
   // 1-1-1. 날짜는 1 이상 31 이하의 숫자여야만 한다.
   static validateVisitDate(date) {
     this.isNumber(date);
@@ -23,6 +25,7 @@ export default class InputValidator {
     const orderArray = orders.split(this.#orderDelimiter);
     this.isValidOrderFormat(orderArray);
     this.isValidOrder(orderArray);
+    this.isValidMenuCount(orderArray);
     return orders;
   }
 
@@ -57,6 +60,17 @@ export default class InputValidator {
     orders.forEach((order) => {
       const menuName = order.split(this.#menuDelimiter)[0];
       if (!MENU[menuName]) {
+        this.throwMenuError();
+      }
+    });
+  }
+
+  // 1-2-3. 메뉴의 개수는 1 이상의 숫자여야만 한다.
+  static isValidMenuCount(orders) {
+    orders.forEach((order) => {
+      const menuCount = order.split(this.#menuDelimiter)[1];
+      const isValid = checkNumber(menuCount) && Number(menuCount) >= this.#minMenuCount;
+      if (!isValid) {
         this.throwMenuError();
       }
     });
