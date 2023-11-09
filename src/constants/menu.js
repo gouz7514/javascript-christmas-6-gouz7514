@@ -22,7 +22,7 @@ export const MENU = {
     price: 55000,
     type: MENU_TYPE.main,
   },
-  "비비큐립": {
+  "바비큐립": {
     price: 54000,
     type: MENU_TYPE.main,
   },
