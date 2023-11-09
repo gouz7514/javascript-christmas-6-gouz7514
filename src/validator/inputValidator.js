@@ -26,6 +26,7 @@ export default class InputValidator {
     this.isValidOrderFormat(orderArray);
     this.isValidOrder(orderArray);
     this.isValidMenuCount(orderArray);
+    this.isMenuRepeat(orderArray);
     return orders;
   }
 
@@ -74,6 +75,19 @@ export default class InputValidator {
         this.throwMenuError();
       }
     });
+  }
+
+  // 1-2-4. 중복 메뉴는 허용하지 않는다.
+  static isMenuRepeat(orders) {
+    const menuSet = new Set();
+    orders.forEach((order) => {
+      const menuName = order.split(this.#menuDelimiter)[0];
+      menuSet.add(menuName);
+    });
+    const isValid = menuSet.size === orders.length;
+    if (!isValid) {
+      this.throwMenuError();
+    }
   }
 
   static throwDateError() {
