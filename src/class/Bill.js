@@ -44,7 +44,6 @@ class Bill {
     this.calculateDayBenefits(visitDate, orders);
     this.calculateSpecialBenefits(visitDate);
     this.calculateGiveAwayBenefits(this.#info.giveAway);
-    console.log(this.#info);
   }
 
   // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
