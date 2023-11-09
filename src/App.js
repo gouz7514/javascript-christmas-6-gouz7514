@@ -27,8 +27,8 @@ class App {
   // 1-2. 고객의 메뉴를 입력받는다.
   async getOrders() {
     try {
-      const menu = InputValidator.validateOrders(await this.inputView.getOrders());
-      return menu;
+      const orders = InputValidator.validateOrders(await this.inputView.getOrders());
+      return orders;
     } catch (error) {
       OutputView.printError(error.message);
       return this.getOrders();
