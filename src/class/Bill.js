@@ -1,8 +1,9 @@
 import { MENU } from "../constants/menu.js";
-import { GIVEAWAY } from "../constants/constant.js";
+import { DATE, BENEFIT, GIVEAWAY } from "../constants/constant.js";
 
 class Bill {
   #info = {
+    visitDate: 1,
     orders: [],
     totalPrice: 0,
     giveAway: false,
@@ -12,18 +13,20 @@ class Bill {
     badge: "",
   };
 
-  createBill(orders) {
+  createBill(visitDate, orders) {
+    this.#info.visitDate = visitDate;
     this.#info.orders = orders;
     this.#info.totalPrice = this.calculateTotalPrice(orders);
     this.#info.giveAway = this.calculateGiveAway(this.#info.totalPrice);
+    this.#info.benefits = this.calculateBenefits(visitDate, orders);
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
   calculateTotalPrice(orders) {
     let totalPrice = 0;
     orders.forEach((order) => {
-      const [menu, count] = order.split("-");
-      totalPrice += MENU[menu] * count;
+      const { menu, amount } = order;
+      totalPrice += MENU[menu].price * amount;
     });
     return totalPrice;
   }
@@ -31,6 +34,23 @@ class Bill {
   // 2-2. 총주문 금액이 12만 원 이상이면 증정 이벤트를 진행한다.
   calculateGiveAway(totalPrice) {
     return totalPrice >= GIVEAWAY;
+  }
+
+  // 2-3. 혜택 내역을 계산한다.
+  calculateBenefits(visitDate) {
+    if (visitDate >= DATE.dday.start && visitDate <= DATE.dday.end) {
+      const christmasBenefit = this.calculateChristmasBenefits(visitDate);
+      this.#info.benefits.push(christmasBenefit);
+    }
+  }
+
+  // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
+  calculateChristmasBenefits(visitDate) {
+    const benefit = {
+      type: BENEFIT.christmas.type,
+      discount: BENEFIT.christmas.startPrice + BENEFIT.christmas.dayPrice * (visitDate - DATE.dday.start),
+    };
+    return benefit;
   }
 }
 

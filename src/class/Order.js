@@ -11,11 +11,11 @@ class Order {
     this.#info.orders = orders;
     this.bill = new Bill();
 
-    this.createBill(orders);
+    this.createBill(visitDate, orders);
   }
 
-  createBill(orders) {
-    this.bill.createBill(orders);
+  createBill(visitDate, orders) {
+    this.bill.createBill(visitDate, orders);
   }
 }
 

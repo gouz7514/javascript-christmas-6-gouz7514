@@ -2,9 +2,9 @@ import { DELIMITER } from "../constants/constant.js";
 
 export const orderToArray = (orders) => {
   const arr = [];
-  orders.split(DELIMITER.order).forEach((menu) => {
-    const [name, count] = menu.split(DELIMITER.menu);
-    arr.push({ name, count });
+  orders.split(DELIMITER.order).forEach((order) => {
+    const [menu, amount] = order.split(DELIMITER.menu);
+    arr.push({ menu, amount });
   });
   return arr;
 };
