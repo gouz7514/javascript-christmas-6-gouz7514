@@ -18,7 +18,8 @@ class Bill {
     this.#info.orders = orders;
     this.#info.totalPrice = this.calculateTotalPrice(orders);
     this.#info.giveAway = this.calculateGiveAway(this.#info.totalPrice);
-    this.#info.benefits = this.calculateBenefits(visitDate, orders);
+    this.calculateBenefits(visitDate, orders);
+    this.#info.benefitAmount = this.calculateBenefitAmount(this.#info.benefits, this.#info.giveAway);
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
@@ -128,6 +129,32 @@ class Bill {
       };
       this.#info.benefits.push(benefit);
     }
+  }
+
+  // 2-4. 총혜택 금액을 계산한다.
+  calculateBenefitAmount(benefits, giveAway) {
+    const benefitDiscount = this.calculateBenefitDiscount(benefits);
+    const benefitGiveAway = this.calculateBenefitGiveAway(giveAway);
+    return benefitDiscount + benefitGiveAway;
+  }
+
+  // 2-4-1. 할인 금액의 합계를 계산한다
+  calculateBenefitDiscount(benefits) {
+    return benefits.reduce((acc, benefit) => {
+      const { type, discount } = benefit;
+      if (type === "discount") {
+        return acc + discount;
+      }
+      return acc;
+    }, 0);
+  }
+
+  // 2-4-2. 증정 메뉴의 가격을 계산한다.
+  calculateBenefitGiveAway(giveAway) {
+    if (giveAway) {
+      return BENEFIT.giveAway.discount;
+    }
+    return 0;
   }
 }
 
