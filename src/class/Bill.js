@@ -1,5 +1,6 @@
 import { MENU } from "../constants/menu.js";
 import { DATE, EVENT, BENEFIT, GIVEAWAY } from "../constants/constant.js";
+import Badge from "./Badge.js";
 
 class Bill {
   #info = {
@@ -21,6 +22,7 @@ class Bill {
     this.calculateBenefits(visitDate, orders);
     this.#info.benefitAmount = this.calculateBenefitAmount(this.#info.benefits, this.#info.giveAway);
     this.#info.finalPrice = this.calculateFinalPrice(this.#info.totalPrice, this.#info.benefits);
+    this.#info.badge = this.createBadge(this.#info.benefitAmount);
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
@@ -161,6 +163,11 @@ class Bill {
   // 2-5. 할인 후 예상 결제 금액을 계산한다.
   calculateFinalPrice(totalPrice, benefits) {
     return totalPrice - this.calculateBenefitDiscount(benefits);
+  }
+
+  // 2-6. 총 혜택 금액에 따라 12월 이벤트 배지를 부여한다.
+  createBadge(benefitAmount) {
+    return new Badge(benefitAmount).name;
   }
 }
 
