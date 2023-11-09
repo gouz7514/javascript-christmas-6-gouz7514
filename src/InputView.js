@@ -7,4 +7,9 @@ export default class InputView {
     const date = await Console.readLineAsync(INPUT.readDate);
     return date;
   }
+
+  async readMenu() {
+    const menu = await Console.readLineAsync(INPUT.readMenu);
+    return menu;
+  }
 }

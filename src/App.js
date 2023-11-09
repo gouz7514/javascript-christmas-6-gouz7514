@@ -1,5 +1,3 @@
-import { Console } from "@woowacourse/mission-utils"
-;
 import InputView from "./InputView.js";
 import OutputView from "./OutputView.js";
 import InputValidator from "./validator/inputValidator.js";
@@ -11,8 +9,8 @@ class App {
   }
 
   async run() {
-    const date = await this.readDate();
-    Console.print(date);
+    await this.readDate();
+    await this.readMenu();
   }
 
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
@@ -23,6 +21,17 @@ class App {
     } catch (error) {
       OutputView.printError(error.message);
       return this.readDate();
+    }
+  }
+
+  // 1-2. 고객의 메뉴를 입력받는다.
+  async readMenu() {
+    try {
+      const menu = InputValidator.validateMenu(await this.inputView.readMenu());
+      return menu;
+    } catch (error) {
+      OutputView.printError(error.message);
+      return this.readMenu();
     }
   }
 }
