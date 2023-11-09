@@ -21,6 +21,7 @@ export default class InputValidator {
     this.isValidOrder(orderArray);
     this.isValidMenuCount(orderArray);
     this.isMenuRepeat(orderArray);
+    this.isMenuCountOver(orderArray);
     return orders;
   }
 
@@ -79,6 +80,18 @@ export default class InputValidator {
       menuSet.add(menuName);
     });
     const isValid = menuSet.size === orders.length;
+    if (!isValid) {
+      this.throwMenuError();
+    }
+  }
+
+  // 1-2-5. 총 메뉴의 개수는 20개를 초과할 수 없다.
+  static isMenuCountOver(orders) {
+    const menuCount = orders.reduce((acc, cur) => {
+      const count = Number(cur.split(DELIMITER.menu)[1]);
+      return acc + count;
+    }, 0);
+    const isValid = menuCount <= MENU_COUNT.max;
     if (!isValid) {
       this.throwMenuError();
     }
