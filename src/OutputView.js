@@ -1,7 +1,16 @@
-export default OutputView = {
-    printMenu() {
-        Console.print("<주문 메뉴>");
-        // ...
-    }
-    // ...
+import { Console } from "@woowacourse/mission-utils";
+import { OUTPUT } from "./constants/message.js";
+
+export default class OutputView {
+  constructor() {
+    OutputView.startOrder();
+  }
+
+  static startOrder() {
+    Console.print(OUTPUT.startOrder);
+  }
+
+  static printError(message) {
+    Console.print(message);
+  }
 }
