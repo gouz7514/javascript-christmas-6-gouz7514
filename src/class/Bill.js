@@ -1,5 +1,5 @@
 import { MENU } from "../constants/menu.js";
-import { DATE, BENEFIT, GIVEAWAY } from "../constants/constant.js";
+import { DATE, EVENT, BENEFIT, GIVEAWAY } from "../constants/constant.js";
 
 class Bill {
   #info = {
@@ -37,11 +37,11 @@ class Bill {
   }
 
   // 2-3. 혜택 내역을 계산한다.
-  calculateBenefits(visitDate) {
+  calculateBenefits(visitDate, orders) {
     if (visitDate >= DATE.dday.start && visitDate <= DATE.dday.end) {
-      const christmasBenefit = this.calculateChristmasBenefits(visitDate);
-      this.#info.benefits.push(christmasBenefit);
+      this.#info.benefits.push(this.calculateChristmasBenefits(visitDate));
     }
+    this.calculateDayBenefits(visitDate, orders);
   }
 
   // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
@@ -51,6 +51,58 @@ class Bill {
       discount: BENEFIT.christmas.startPrice + BENEFIT.christmas.dayPrice * (visitDate - DATE.dday.start),
     };
     return benefit;
+  }
+
+  // 2-3-2. 요일에 따라 평일, 주말 할인 금액을 계산한다.
+  calculateDayBenefits(visitDate, orders) {
+    const day = new Date(EVENT.year, EVENT.month - 1, visitDate).getDay();
+    if (DATE.weekDay.includes(day)) {
+      this.#info.benefits.push(this.calculateWeekDayBenefits(orders));
+    } else if (DATE.weekend.includes(day)) {
+      this.#info.benefits.push(this.calculateWeekendBenefits(orders));
+    }
+  }
+
+  // 평일 할인 금액을 계산한다.
+  calculateWeekDayBenefits(orders) {
+    const discountNumber = this.calculateWeekDayDiscountNumber(orders);
+    const benefit = {
+      type: BENEFIT.weekDay.type,
+      discount: BENEFIT.weekDay.discount * discountNumber,
+    };
+
+    return benefit;
+  }
+
+  calculateWeekDayDiscountNumber(orders) {
+    return orders.reduce((acc, order) => {
+      const { menu, amount } = order;
+      if (MENU[menu].type === BENEFIT.weekDay.menuType) {
+        return acc + amount;
+      }
+      return acc;
+    }, 0);
+  }
+
+  // 주말 할인 금액을 계산한다.
+  calculateWeekEndBenefits(orders) {
+    const discountNumber = this.calculateWeekEndDiscountNumber(orders);
+    const benefit = {
+      type: BENEFIT.weekEnd.type,
+      discount: BENEFIT.weekEnd.discount * discountNumber,
+    };
+
+    return benefit;
+  }
+
+  calculateWeekEndDiscountNumber(orders) {
+    return orders.reduce((acc, order) => {
+      const { menu, amount } = order;
+      if (MENU[menu].type === BENEFIT.weekEnd.menuType) {
+        return acc + amount;
+      }
+      return acc;
+    }, 0);
   }
 }
 
