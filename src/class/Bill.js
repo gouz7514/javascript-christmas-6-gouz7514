@@ -44,11 +44,13 @@ class Bill {
     this.calculateDayBenefits(visitDate, orders);
     this.calculateSpecialBenefits(visitDate);
     this.calculateGiveAwayBenefits(this.#info.giveAway);
+    console.log(this.#info);
   }
 
   // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
   calculateChristmasBenefits(visitDate) {
     const benefit = {
+      name: BENEFIT.christmas.name,
       type: BENEFIT.christmas.type,
       discount: BENEFIT.christmas.startPrice + BENEFIT.christmas.dayPrice * (visitDate - DATE.dday.start),
     };
@@ -69,6 +71,7 @@ class Bill {
   calculateWeekDayBenefits(orders) {
     const discountNumber = this.calculateWeekDayDiscountNumber(orders);
     const benefit = {
+      name: BENEFIT.weekDay.name,
       type: BENEFIT.weekDay.type,
       discount: BENEFIT.weekDay.discount * discountNumber,
     };
@@ -90,6 +93,7 @@ class Bill {
   calculateWeekEndBenefits(orders) {
     const discountNumber = this.calculateWeekEndDiscountNumber(orders);
     const benefit = {
+      name: BENEFIT.weekEnd.name,
       type: BENEFIT.weekEnd.type,
       discount: BENEFIT.weekEnd.discount * discountNumber,
     };
@@ -119,6 +123,7 @@ class Bill {
   calculateGiveAwayBenefits(giveAway) {
     if (giveAway) {
       const benefit = {
+        name: BENEFIT.giveAway.name,
         type: BENEFIT.giveAway.type,
         discount: BENEFIT.giveAway.discount * BENEFIT.giveAway.amount,
       };

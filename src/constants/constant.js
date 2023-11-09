@@ -19,26 +19,31 @@ export const EVENT = {
 
 export const BENEFIT = {
   christmas: {
-    type: 'christmas',
+    name: 'christmas',
+    type: 'discount',
     startPrice: 1000,
     dayPrice: 100,
   },
   weekDay: {
-    type: 'weekDay',
+    name: 'weekDay',
+    type: 'discount',
     menuType: MENU_TYPE.dessert,
     discount: 2023,
   },
   weekEnd: {
-    type: 'weekEnd',
+    name: 'weekEnd',
+    type: 'discount',
     menuType: MENU_TYPE.main,
     discount: 2023,
   },
   special: {
-    type: 'special',
+    name: 'special',
+    type: 'discount',
     discount: 1000,
   },
   giveAway: {
-    type: 'giveAway',
+    name: 'giveAway',
+    type: 'event',
     discount: MENU['샴페인'].price,
     amount: 1,
   },
