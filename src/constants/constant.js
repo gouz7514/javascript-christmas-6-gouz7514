@@ -22,6 +22,8 @@ export const BENEFIT_TYPE = {
   event: 'event',
 };
 
+export const BENEFIT_THRESHOLD = 10000;
+
 export const BENEFIT = {
   christmas: {
     name: 'christmas',

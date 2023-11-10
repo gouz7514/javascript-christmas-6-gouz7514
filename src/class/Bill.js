@@ -1,5 +1,5 @@
 import { MENU } from "../constants/menu.js";
-import { DATE, EVENT, BENEFIT_TYPE, BENEFIT } from "../constants/constant.js";
+import { DATE, EVENT, BENEFIT_TYPE, BENEFIT_THRESHOLD, BENEFIT } from "../constants/constant.js";
 import Badge from "./Badge.js";
 
 class Bill {
@@ -18,11 +18,14 @@ class Bill {
     const { visitDate, orders } = order;
     this.setBasicInfo(visitDate, orders);
     const totalPrice = this.calculateTotalPrice(orders);
-    const giveAway = this.calculateGiveAway(totalPrice);
-    const benefits = this.calculateBenefits(visitDate, orders);
-    const benefitAmount = this.calculateBenefitAmount(benefits, giveAway);
-    this.setFinalPrice(totalPrice, benefits);
-    this.setBadge(benefitAmount);
+    // 2-1-1. 총주문 금액이 10,000원 이상인 경우에만 혜택 내역을 계산한다.
+    if (totalPrice >= BENEFIT_THRESHOLD) {
+      const giveAway = this.calculateGiveAway(totalPrice);
+      const benefits = this.calculateBenefits(visitDate, orders);
+      const benefitAmount = this.calculateBenefitAmount(benefits, giveAway);
+      this.setBadge(benefitAmount);
+    }
+    this.setFinalPrice(visitDate, orders);
     return this.#info;
   }
 
@@ -185,6 +188,7 @@ class Bill {
     const benefitDiscount = this.calculateBenefitDiscount(benefits);
     const benefitGiveAway = this.calculateBenefitGiveAway(giveAway);
     benefitAmount = benefitDiscount + benefitGiveAway;
+    this.setBenefitAmount(benefitAmount);
     return benefitAmount;
   }
 
@@ -211,17 +215,7 @@ class Bill {
     return 0;
   }
 
-  setFinalPrice(totalPrice, benefits) {
-    const finalPrice = this.calculateFinalPrice(totalPrice, benefits);
-    this.#info.finalPrice = finalPrice;
-  }
-
-  // 2-5. 할인 후 예상 결제 금액을 계산한다.
-  calculateFinalPrice(totalPrice, benefits) {
-    return totalPrice - this.calculateBenefitDiscount(benefits);
-  }
-
-  // 2-6. 총 혜택 금액에 따라 12월 이벤트 배지를 부여한다.
+  // 2-5. 총 혜택 금액에 따라 12월 이벤트 배지를 부여한다.
   setBadge(benefitAmount) {
     const badge = this.createBadge(benefitAmount);
     this.#info.badge = badge;
@@ -231,6 +225,17 @@ class Bill {
   createBadge(benefitAmount) {
     const badge = new Badge();
     return badge.createBadge(benefitAmount);
+  }
+  // 2-6. 할인 후 예상 결제 금액을 계산한다.
+  setFinalPrice(visitDate, orders) {
+    const totalPrice = this.calculateTotalPrice(orders);
+    const benefits = this.calculateBenefits(visitDate, orders);
+    const finalPrice = this.calculateFinalPrice(totalPrice, benefits);
+    this.#info.finalPrice = finalPrice;
+  }
+
+  calculateFinalPrice(totalPrice, benefits) {
+    return totalPrice - this.calculateBenefitDiscount(benefits);
   }
 }
 
