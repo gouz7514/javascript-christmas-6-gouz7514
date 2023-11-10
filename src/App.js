@@ -8,11 +8,12 @@ import { orderToArray } from "./util/order.js";
 
 class App {
   constructor() {
-    this.inputView = new InputView();
-    this.outputView = new OutputView();
+    this.inputView = InputView;
+    this.outputView = OutputView;
   }
 
   async run() {
+    this.outputView.startOrder();
     const visitDate = Number(await this.getVisitDate());
     const orders = await this.getOrders();
     this.createOrder(visitDate, orders);

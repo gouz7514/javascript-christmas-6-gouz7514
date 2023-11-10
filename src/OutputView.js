@@ -1,16 +1,13 @@
 import { Console } from "@woowacourse/mission-utils";
 import { OUTPUT } from "./constants/message.js";
 
-export default class OutputView {
-  constructor() {
-    OutputView.startOrder();
-  }
-
-  static startOrder() {
+const OutputView = {
+  startOrder() {
     Console.print(OUTPUT.startOrder);
-  }
-
-  static printError(message) {
+  },
+  printError(message) {
     Console.print(message);
   }
-}
+};
+
+export default OutputView;
