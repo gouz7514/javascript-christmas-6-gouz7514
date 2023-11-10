@@ -66,7 +66,7 @@ class Bill {
     if (DATE.weekDay.includes(day)) {
       this.#info.benefits.push(this.calculateWeekDayBenefits(orders));
     } else if (DATE.weekend.includes(day)) {
-      this.#info.benefits.push(this.calculateWeekendBenefits(orders));
+      this.#info.benefits.push(this.calculateWeekEndBenefits(orders));
     }
   }
 
