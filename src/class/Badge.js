@@ -14,10 +14,17 @@ const BADGE = {
 };
 
 class Badge {
-  #name;
+  #info = {
+    name: ''
+  };
 
-  constructor(benefitAmount = 0) {
-    this.#name = this.decideBadgeName(benefitAmount);
+  createBadge(benefitAmount) {
+    this.setBadgeInfo(benefitAmount);
+    return this.#info;
+  }
+
+  setBadgeInfo(benefitAmount) {
+    this.#info.name = this.decideBadgeName(benefitAmount);
   }
 
   decideBadgeName(benefitAmount) {
@@ -31,10 +38,6 @@ class Badge {
       return BADGE.star.name;
     }
     return "";
-  }
-
-  get name() {
-    return this.#name;
   }
 }
 

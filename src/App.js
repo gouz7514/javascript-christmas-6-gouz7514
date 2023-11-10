@@ -10,13 +10,16 @@ class App {
   constructor() {
     this.inputView = InputView;
     this.outputView = OutputView;
+    this.order = new Order();
   }
 
   async run() {
     this.outputView.startOrder();
     const visitDate = Number(await this.getVisitDate());
-    const orders = await this.getOrders();
-    this.createOrder(visitDate, orders);
+    const userOrder = await this.getOrders();
+    const orderInfo = this.createOrderInfo(visitDate, userOrder);
+    const bill = this.createBill(orderInfo);
+    console.log('bill : ', bill);
   }
 
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
@@ -42,9 +45,15 @@ class App {
   }
 
   // 2. 12월 이벤트 계획에 따라 필요한 정보를 계산한다.
-  createOrder(visitDate, orders) {
+  createOrderInfo(visitDate, orders) {
     const orderArray = orderToArray(orders);
-    const order = new Order(visitDate, orderArray);
+    const orderInfo = this.order.createOrderInfo(visitDate, orderArray);
+    return orderInfo;
+  }
+
+  createBill(orders) {
+    const bill = this.order.createBill(orders);
+    return bill;
   }
 }
 

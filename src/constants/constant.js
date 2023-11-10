@@ -17,35 +17,41 @@ export const EVENT = {
   month: 12,
 };
 
+export const BENEFIT_TYPE = {
+  discount: 'discount',
+  event: 'event',
+};
+
 export const BENEFIT = {
   christmas: {
     name: 'christmas',
-    type: 'discount',
+    type: BENEFIT_TYPE.discount,
     startPrice: 1000,
     dayPrice: 100,
   },
   weekDay: {
     name: 'weekDay',
-    type: 'discount',
+    type: BENEFIT_TYPE.discount,
     menuType: MENU_TYPE.dessert,
     discount: 2023,
   },
   weekEnd: {
     name: 'weekEnd',
-    type: 'discount',
+    type: BENEFIT_TYPE.discount,
     menuType: MENU_TYPE.main,
     discount: 2023,
   },
   special: {
     name: 'special',
-    type: 'discount',
+    type: BENEFIT_TYPE.discount,
     discount: 1000,
   },
   giveAway: {
     name: 'giveAway',
-    type: 'event',
+    type: BENEFIT_TYPE.event,
     discount: MENU['샴페인'].price,
     amount: 1,
+    threshold: 12000,
   },
 };
 
@@ -53,5 +59,3 @@ export const DELIMITER = {
   order: ",",
   menu: "-",
 };
-
-export const GIVEAWAY = 120000;

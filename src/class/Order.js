@@ -6,16 +6,20 @@ class Order {
     orders: [],
   };
 
-  constructor(visitDate, orders) {
-    this.#info.visitDate = visitDate;
-    this.#info.orders = orders;
+  constructor() {
     this.bill = new Bill();
-
-    this.createBill(visitDate, orders);
   }
 
-  createBill(visitDate, orders) {
-    this.bill.createBill(visitDate, orders);
+  createOrderInfo(visitDate, orders) {
+    this.#info.visitDate = visitDate;
+    this.#info.orders = orders;
+    
+    return this.#info;
+  }
+
+  createBill(orders) {
+    const billInfo = this.bill.createBillInfo(orders);
+    return billInfo;
   }
 }
 
