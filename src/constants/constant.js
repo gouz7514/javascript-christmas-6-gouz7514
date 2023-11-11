@@ -1,4 +1,4 @@
-import { MENU_TYPE, MENU } from "./menu.js";
+import { MENU_TYPE, MENU, MENU_GIVEAWAY } from "./menu.js";
 
 export const DATE = {
   start: 1,
@@ -27,31 +27,37 @@ export const BENEFIT_THRESHOLD = 10000;
 export const BENEFIT = {
   christmas: {
     name: 'christmas',
+    name_ko: '크리스마스 디데이 할인',
     type: BENEFIT_TYPE.discount,
     startPrice: 1000,
     dayPrice: 100,
   },
   weekDay: {
     name: 'weekDay',
+    name_ko: '평일 할인',
     type: BENEFIT_TYPE.discount,
     menuType: MENU_TYPE.dessert,
     discount: 2023,
   },
   weekEnd: {
     name: 'weekEnd',
+    name_ko: '주말 할인',
     type: BENEFIT_TYPE.discount,
     menuType: MENU_TYPE.main,
     discount: 2023,
   },
   special: {
     name: 'special',
+    name_ko: '특별 할인',
     type: BENEFIT_TYPE.discount,
     discount: 1000,
   },
   giveAway: {
     name: 'giveAway',
+    name_ko: '증정 이벤트',
     type: BENEFIT_TYPE.event,
-    discount: MENU['샴페인'].price,
+    discount: MENU[MENU_GIVEAWAY].price,
+    menu: MENU_GIVEAWAY,
     amount: 1,
   },
 };

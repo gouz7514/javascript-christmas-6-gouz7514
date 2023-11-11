@@ -60,3 +60,5 @@ export const MENU_COUNT = {
   min: 1,
   max: 20,
 };
+
+export const MENU_GIVEAWAY = "샴페인";
