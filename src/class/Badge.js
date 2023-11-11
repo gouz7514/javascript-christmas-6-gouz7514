@@ -1,4 +1,3 @@
-// import { BADGE } from "../constants/constant.js";
 import { BADGE } from "../constants/badge.js";
 
 class Badge {
