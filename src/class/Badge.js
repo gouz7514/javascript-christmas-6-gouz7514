@@ -1,29 +1,17 @@
-const BADGE = {
-  santa: {
-    name: "산타",
-    threshold: 20000,
-  },
-  tree: {
-    name: "트리",
-    threshold: 10000,
-  },
-  star: {
-    name: "별",
-    threshold: 5000,
-  },
-};
+// import { BADGE } from "../constants/constant.js";
+import { BADGE } from "../constants/badge.js";
 
 class Badge {
   #info = {
     name: ''
   };
 
-  createBadge(benefitAmount) {
+  constructor(benefitAmount) {
     this.setBadgeInfo(benefitAmount);
-    return this.#info;
   }
 
   setBadgeInfo(benefitAmount) {
+    if (benefitAmount < BADGE.star.threshold) return;
     this.#info.name = this.decideBadgeName(benefitAmount);
   }
 
@@ -38,6 +26,10 @@ class Badge {
       return BADGE.star.name;
     }
     return "";
+  }
+
+  get info() {
+    return this.#info;
   }
 }
 

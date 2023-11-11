@@ -53,8 +53,27 @@ export const BENEFIT = {
     type: BENEFIT_TYPE.event,
     discount: MENU['샴페인'].price,
     amount: 1,
-    threshold: 12000,
   },
+};
+
+export const BADGE = {
+  santa: {
+    name: "산타",
+    threshold: 20000,
+  },
+  tree: {
+    name: "트리",
+    threshold: 10000,
+  },
+  star: {
+    name: "별",
+    threshold: 5000,
+  },
+};
+
+export const THRESHOLD = {
+  event: 10000,
+  giveAway: 120000,
 };
 
 export const DELIMITER = {

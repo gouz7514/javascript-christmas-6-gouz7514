@@ -2,24 +2,21 @@ import InputView from "./InputView.js";
 import OutputView from "./OutputView.js";
 import InputValidator from "./validator/inputValidator.js";
 
-import Order from "./class/Order.js";
-
-import { orderToArray } from "./util/order.js";
+import Bill from "./class/Bill.js";
 
 class App {
   constructor() {
     this.inputView = InputView;
     this.outputView = OutputView;
-    this.order = new Order();
   }
 
   async run() {
     this.outputView.startOrder();
     const visitDate = Number(await this.getVisitDate());
-    const userOrder = await this.getOrders();
-    const orderInfo = this.createOrderInfo(visitDate, userOrder);
-    const bill = this.createBill(orderInfo);
-    console.log('bill : ', bill);
+    const orders = await this.getOrders();
+    const bill = this.createBill(visitDate, orders);
+    const billInfo = bill.calculateBill();
+    console.log(billInfo);
   }
 
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
@@ -44,15 +41,9 @@ class App {
     }
   }
 
-  // 2. 12월 이벤트 계획에 따라 필요한 정보를 계산한다.
-  createOrderInfo(visitDate, orders) {
-    const orderArray = orderToArray(orders);
-    const orderInfo = this.order.createOrderInfo(visitDate, orderArray);
-    return orderInfo;
-  }
-
-  createBill(orders) {
-    const bill = this.order.createBill(orders);
+  // 2. 방문 날짜와 주문을 토대로 영수증을 생성한다.
+  createBill(visitDate, orders) {
+    const bill = new Bill(visitDate, orders);
     return bill;
   }
 }
