@@ -1,6 +1,6 @@
 import { DATE, DELIMITER } from "../constants/constant.js";
 import { ERROR } from "../constants/error.js";
-import { MENU, MENU_COUNT } from "../constants/menu.js";
+import { MENU, MENU_COUNT, MENU_TYPE } from "../constants/menu.js";
 
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
@@ -20,6 +20,7 @@ export default class InputValidator {
     this.isValidMenuCount(orderArray);
     this.isMenuRepeat(orderArray);
     this.isMenuCountOver(orderArray);
+    this.isMenuOnlyDrink(orderArray);
     return orders;
   }
 
@@ -90,6 +91,20 @@ export default class InputValidator {
       return acc + count;
     }, 0);
     const isValid = menuCount <= MENU_COUNT.max;
+    if (!isValid) {
+      this.throwMenuError();
+    }
+  }
+
+  // 1-2-6. 음료만 주문할 수 없다.
+  static isMenuOnlyDrink(orders) {
+    const menuTypeSet = new Set();
+    orders.forEach((order) => {
+      const menuName = order.split(DELIMITER.menu)[0];
+      const menuType = MENU[menuName].type;
+      menuTypeSet.add(menuType);
+    });
+    const isValid = menuTypeSet.size !== 1 || !menuTypeSet.has(MENU_TYPE.drink);
     if (!isValid) {
       this.throwMenuError();
     }
