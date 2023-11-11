@@ -1,4 +1,4 @@
-import { MENU_TYPE, MENU } from "./menu.js";
+import { MENU_TYPE, MENU, MENU_GIVEAWAY } from "./menu.js";
 
 export const DATE = {
   start: 1,
@@ -56,8 +56,8 @@ export const BENEFIT = {
     name: 'giveAway',
     name_ko: '증정 이벤트',
     type: BENEFIT_TYPE.event,
-    discount: MENU['샴페인'].price,
-    menu: "샴페인",
+    discount: MENU[MENU_GIVEAWAY].price,
+    menu: MENU_GIVEAWAY,
     amount: 1,
   },
 };
