@@ -6,22 +6,21 @@ import { getDay } from "../util/date.js";
 
 import Badge from "./Badge.js";
 
-const BILL_TEMPLATE = {
-  totalPrice: 0,
-  giveAway: false,
-  benefits: [],
-  benefitAmount: 0,
-  badge: '',
-  finalPrice: 0,
-};
-
 class Bill {
-  #visitDate;
-  #orders;
+  #result = {
+    visitDate: 0,
+    orders: [],
+    totalPrice: 0,
+    giveAway: false,
+    benefits: [],
+    benefitAmount: 0,
+    badge: '',
+    finalPrice: 0,
+  };
 
   constructor(visitDate, orders) {
-    this.#visitDate = visitDate;
-    this.#orders = orderToArray(orders);
+    this.#result.visitDate = visitDate;
+    this.#result.orders = orderToArray(orders);
   }
 
   // 이벤트 대상인지 확인한다. 총주문 금액이 10,000원 이상이면 이벤트 대상이다.
@@ -30,17 +29,18 @@ class Bill {
   }
 
   calculateBill() {
-    const totalPrice = this.calculateTotalPrice(this.#orders);
-    BILL_TEMPLATE.totalPrice = totalPrice;
+    const { visitDate, orders } = this.#result;
+    const totalPrice = this.calculateTotalPrice(orders);
+    this.#result.totalPrice = totalPrice;
     // 2-1-1. 이벤트 대상인 경우 증정 여부, 혜택 내역, 총혜택 금액, 뱃지를 계산한다.
     if (this.isEventTarget(totalPrice)) {
-      BILL_TEMPLATE.giveAway = this.calculateGiveAway(this.#orders);
-      BILL_TEMPLATE.benefits = this.calculateBenefits(this.#visitDate, this.#orders);
-      BILL_TEMPLATE.benefitAmount = this.calculateBenefitAmount(this.#visitDate, this.#orders);
-      BILL_TEMPLATE.badge = this.createBadge(this.#visitDate, this.#orders);
+      this.#result.giveAway = this.calculateGiveAway(orders);
+      this.#result.benefits = this.calculateBenefits(visitDate, orders);
+      this.#result.benefitAmount = this.calculateBenefitAmount(visitDate, orders);
+      this.#result.badge = this.createBadge(visitDate, orders);
     }
-    BILL_TEMPLATE.finalPrice = this.calculateFinalPrice(this.#visitDate, this.#orders);
-    return BILL_TEMPLATE;
+    this.#result.finalPrice = this.calculateFinalPrice(visitDate, orders);
+    return this.#result;
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
@@ -205,6 +205,11 @@ class Bill {
     const benefitDiscount = this.calculateBenefitDiscount(visitDate, orders);
     const finalPrice = totalPrice - benefitDiscount;
     return finalPrice;
+  }
+
+  get orders() {
+    const { orders } = this.#result;
+    return orders;
   }
 }
 
