@@ -55,7 +55,7 @@ const outputHelper = {
       result += `\n${EMPTY_CASE.badge}`;
       return result;
     }
-    const { info: { name: badgeName } } = badge;
+    const { name: badgeName } = badge;
     result += `\n${badgeName}`;
     return result;
   }
