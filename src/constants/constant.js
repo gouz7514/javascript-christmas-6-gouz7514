@@ -1,5 +1,15 @@
 import { MENU_TYPE } from "./menu.js";
 
+export const DAY = {
+  sun: 0,
+  mon: 1,
+  tue: 2,
+  wed: 3,
+  thu: 4,
+  fri: 5,
+  sat: 6,
+};
+
 export const DATE = {
   start: 1,
   end: 31,
@@ -7,8 +17,8 @@ export const DATE = {
     start: 1,
     end: 25,
   },
-  weekDay: [0, 1, 2, 3, 4],
-  weekend: [5, 6],
+  weekDay: [DAY.mon, DAY.tue, DAY.wed, DAY.thu, DAY.fri],
+  weekend: [DAY.sun, DAY.sat],
   special: [3, 10, 17, 24, 25, 31],
 };
 

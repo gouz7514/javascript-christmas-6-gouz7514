@@ -1,7 +1,7 @@
 import { DATE, EVENT, BENEFIT_TYPE, BENEFIT, BENEFIT_EMPTY_CASE } from "../constants/constant.js";
 import { BADGE_THRESHOLD } from "../constants/badge.js";
 import { orderToArray } from "../util/order.js";
-import { getDay } from "../util/date.js";
+import { getDay, isWeekend, isWeekday, isSpecial } from "../util/date.js";
 
 import menu from "./Menu.js";
 import Badge from "./Badge.js";
@@ -97,10 +97,10 @@ class Bill {
   // 2-3-2. 요일에 따라 평일, 주말 할인 금액을 계산한다.
   calculateDayBenefit(visitDate, orders) {
     const day = getDay(visitDate);
-    if (DATE.weekDay.includes(day)) {
+    if (isWeekday(day)) {
       return this.calculateWeekDayBenefits(visitDate, orders);
     }
-    if (DATE.weekend.includes(day)) {
+    if (isWeekend(day)) {
       return this.calculateWeekEndBenefits(visitDate, orders);
     }
     return BENEFIT_EMPTY_CASE.dayBenefit;
@@ -108,7 +108,7 @@ class Bill {
 
   // 평일 할인 금액을 계산한다.
   calculateWeekDayBenefits(visitDate, orders) {
-    if (!DATE.weekDay.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.benefit;
+    if (!isWeekday(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.benefit;
     const discountNumber = this.calculateWeekDayDiscountNumber(visitDate, orders);
     if (!discountNumber) return BENEFIT_EMPTY_CASE.weekDay.benefit;
     return {
@@ -119,7 +119,7 @@ class Bill {
   }
 
   calculateWeekDayDiscountNumber(visitDate, orders) {
-    if (!DATE.weekDay.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.discountNumber;
+    if (!isWeekday(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
       if (menu.getMenuType(menuName) === BENEFIT.weekDay.menuType) {
@@ -131,7 +131,7 @@ class Bill {
 
   // 주말 할인 금액을 계산한다.
   calculateWeekEndBenefits(visitDate, orders) {
-    if (!DATE.weekend.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
+    if (!isWeekend(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
     const discountNumber = this.calculateWeekEndDiscountNumber(visitDate, orders);
     if (!discountNumber) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
     return {
@@ -142,7 +142,7 @@ class Bill {
   }
 
   calculateWeekEndDiscountNumber(visitDate, orders) {
-    if (!DATE.weekend.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.discountNumber;
+    if (!isWeekend(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
       if (menu.getMenuType(menuName) === BENEFIT.weekEnd.menuType) {
@@ -154,7 +154,7 @@ class Bill {
 
   // 2-3-3. 특별 할인 금액을 계산한다.
   calculateSpecialBenefit(visitDate) {
-    if (!DATE.special.includes(visitDate)) return BENEFIT_EMPTY_CASE.specialBenefit;
+    if (!isSpecial(visitDate)) return BENEFIT_EMPTY_CASE.specialBenefit;
     return {
       name: BENEFIT.special.name,
       type: BENEFIT.special.type,
