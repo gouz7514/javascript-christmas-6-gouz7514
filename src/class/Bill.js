@@ -12,7 +12,7 @@ class Bill {
     orders: [],
     totalPrice: 0,
     giveAway: false,
-    benefits: [],
+    benefits: null,
     benefitAmount: 0,
     badge: '',
     finalPrice: 0,
@@ -110,6 +110,7 @@ class Bill {
   #calculateWeekDayBenefits(visitDate, orders) {
     if (!DATE.weekDay.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.benefit;
     const discountNumber = this.#calculateWeekDayDiscountNumber(visitDate, orders);
+    if (!discountNumber) return BENEFIT_EMPTY_CASE.weekDay.benefit;
     return {
       name: BENEFIT.weekDay.name,
       type: BENEFIT.weekDay.type,
@@ -132,6 +133,7 @@ class Bill {
   #calculateWeekEndBenefits(visitDate, orders) {
     if (!DATE.weekend.includes(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
     const discountNumber = this.#calculateWeekEndDiscountNumber(visitDate, orders);
+    if (!discountNumber) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
     return {
       name: BENEFIT.weekEnd.name,
       type: BENEFIT.weekEnd.type,
