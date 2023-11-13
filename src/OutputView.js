@@ -76,8 +76,8 @@ const OutputView = {
       Console.print(EMPTY_CASE.badge);
       return;
     }
-    const { info } = badge;
-    Console.print(`${info.name}`);
+    const { info: { name: badgeName } } = badge;
+    Console.print(`${badgeName}`);
   },
 };
 
