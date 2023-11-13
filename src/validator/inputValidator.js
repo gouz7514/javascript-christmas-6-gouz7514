@@ -1,5 +1,6 @@
 import { DATE, DELIMITER } from "../constants/constant.js";
 import { ERROR } from "../constants/error.js";
+import menu from "../class/Menu.js";
 
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
@@ -7,7 +8,7 @@ const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
 export default class InputValidator {
   #menu;
 
-  constructor(menu) {
+  constructor() {
     this.#menu = menu;
   }
 

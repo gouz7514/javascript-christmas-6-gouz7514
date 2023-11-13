@@ -3,19 +3,12 @@ import OutputView from "./OutputView.js";
 import InputValidator from "./validator/inputValidator.js";
 
 import Bill from "./class/Bill.js";
-import Menu from "./class/Menu.js";
 
 class App {
-  #menu;
   #inputValidator;
 
   constructor() {
-    this.#menu = new Menu();
-    this.initilizeInputValidator();
-  }
-
-  initilizeInputValidator() {
-    this.#inputValidator = new InputValidator(this.#menu);
+    this.#inputValidator = new InputValidator();
   }
 
   async run() {

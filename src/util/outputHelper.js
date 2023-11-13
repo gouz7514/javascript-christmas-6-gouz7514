@@ -1,5 +1,6 @@
 import { OUTPUT, UNIT, EMPTY_CASE } from "../constants/message.js";
 import { BENEFIT } from "../constants/constant.js";
+import menu from "../class/Menu.js";
 
 const outputHelper = {
   printBill(date) {
@@ -7,8 +8,8 @@ const outputHelper = {
   },
   printOrders(orders) {
     return orders.reduce((acc, cur) => {
-      const { menu, amount } = cur;
-      return `${acc}\n${menu} ${amount}${UNIT.amount}`;
+      const { menu: menuName, amount: menuAmount } = cur;
+      return `${acc}\n${menuName} ${menuAmount}${UNIT.amount}`;
     }, OUTPUT.printOrders);
   },
   printTotalPrice(price) {
@@ -20,7 +21,8 @@ const outputHelper = {
       result += `\n${EMPTY_CASE.giveAway}`;
       return result;
     }
-    result += `\n${BENEFIT.giveAway.menu} ${BENEFIT.giveAway.amount}${UNIT.amount}`;
+    const { name: giveAwayMenuName, amount: giveAwayMenuAmount } = menu.getGiveAwaymenuInfo();
+    result += `\n${giveAwayMenuName} ${giveAwayMenuAmount}${UNIT.amount}`;
     return result;
   },
   printBenefits(benefits) {

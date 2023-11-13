@@ -61,4 +61,7 @@ export const MENU_COUNT = {
   max: 20,
 };
 
-export const MENU_GIVEAWAY = "샴페인";
+export const MENU_GIVEAWAY = {
+  name: "샴페인",
+  amount: 1,
+};

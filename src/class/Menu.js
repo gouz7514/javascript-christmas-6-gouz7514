@@ -19,6 +19,10 @@ class Menu {
     return this.#menu.content[menuName].type;
   }
 
+  getMenuPrice(menuName) {
+    return this.#menu.content[menuName].price;
+  }
+
   isCntOverMin(cnt) {
     return cnt >= this.#menu.count.min;
   }
@@ -36,6 +40,17 @@ class Menu {
     });
     return menuTypeSet.size !== 1 || !menuTypeSet.has(MENU_TYPE.drink);
   }
+
+  getGiveAwaymenuInfo() {
+    const { name, amount } = this.#menu.giveAway;
+    return {
+      name,
+      amount,
+      price: this.#menu.content[name].price,
+    };
+  }
 }
 
-export default Menu;
+const menu = new Menu();
+
+export default menu;
