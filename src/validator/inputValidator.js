@@ -6,7 +6,6 @@ const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
 
 export default class InputValidator {
-  // 1-1-1. 날짜는 1 이상 31 이하의 숫자여야만 한다.
   static validateVisitDate(date) {
     this.isNumber(date);
     this.isValidDate(date);
@@ -24,6 +23,7 @@ export default class InputValidator {
     return orders;
   }
 
+  // 1-1-1. 입력값은 숫자여야 한다.
   static isNumber(value) {
     const isValid = this.checkNumber(value);
     if (!isValid) {
@@ -31,6 +31,7 @@ export default class InputValidator {
     }
   }
 
+  // 1-1-2. 입력값은 1 이상 31 이하의 숫자여야만 한다.
   static isValidDate(value) {
     const isValid = Number(value) >= DATE.start && Number(value) <= DATE.end;
     if (!isValid) {

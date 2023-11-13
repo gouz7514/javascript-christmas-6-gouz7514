@@ -15,14 +15,13 @@ export const DATE = {
 export const EVENT = {
   year: 2023,
   month: 12,
+  priceThreshold: 10000,
 };
 
 export const BENEFIT_TYPE = {
   discount: 'discount',
   event: 'event',
 };
-
-export const BENEFIT_THRESHOLD = 10000;
 
 export const BENEFIT = {
   christmas: {
@@ -59,6 +58,7 @@ export const BENEFIT = {
     discount: MENU[MENU_GIVEAWAY].price,
     menu: MENU_GIVEAWAY,
     amount: 1,
+    threshold: 120000,
   },
 };
 
