@@ -30,7 +30,7 @@ class Bill {
 
   // 이벤트 대상인지 확인한다. 주문을 토대로 한 총주문 금액이 10,000원 이상이면 이벤트 대상이다.
   #isOrderEventTarget(orders) {
-    const totalPrice = this.#calculateTotalPrice(orders);
+    const totalPrice = this.#result.totalPrice || this.#calculateTotalPrice(orders);
     return this.#isEventTarget(totalPrice);
   }
 
@@ -65,7 +65,8 @@ class Bill {
 
   // 2-2. 총주문 금액이 12만 원 이상이면 증정 이벤트를 진행한다.
   #calculateGiveAway(orders) {
-    return this.#calculateTotalPrice(orders) >= BENEFIT.giveAway.threshold;
+    const totalPrice = this.#result.totalPrice || this.#calculateTotalPrice(orders);
+    return totalPrice >= BENEFIT.giveAway.threshold;
   }
 
   // 2-3. 혜택 내역을 계산한다.
@@ -213,7 +214,7 @@ class Bill {
 
   // 2-6. 할인 후 예상 결제 금액을 계산한다.
   #calculateFinalPrice(visitDate, orders) {
-    const totalPrice = this.#calculateTotalPrice(orders);
+    const totalPrice = this.#result.totalPrice || this.#calculateTotalPrice(orders);
     const benefitDiscount = this.#calculateBenefitDiscount(visitDate, orders);
     const finalPrice = totalPrice - benefitDiscount;
     return finalPrice;
