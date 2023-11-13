@@ -6,12 +6,6 @@ const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
 
 export default class InputValidator {
-  #menu;
-
-  constructor() {
-    this.#menu = menu;
-  }
-
   validateVisitDate(date) {
     this.isNumber(date);
     this.isValidDate(date);
@@ -61,7 +55,7 @@ export default class InputValidator {
   isValidOrder(orders) {
     orders.forEach((order) => {
       const menuName = order.split(DELIMITER.menu)[0];
-      const isValid = this.#menu.isMenuExist(menuName);
+      const isValid = menu.isMenuExist(menuName);
       if (!isValid) {
         this.throwMenuError();
       }
@@ -72,7 +66,7 @@ export default class InputValidator {
   isValidMenuCount(orders) {
     orders.forEach((order) => {
       const menuCount = order.split(DELIMITER.menu)[1];
-      const isValid = this.checkNumber(menuCount) && Number(menuCount) >= this.#menu.isCntOverMin(menuCount);
+      const isValid = this.checkNumber(menuCount) && Number(menuCount) >= menu.isCntOverMin(menuCount);
       if (!isValid) {
         this.throwMenuError();
       }
@@ -98,7 +92,7 @@ export default class InputValidator {
       const count = Number(cur.split(DELIMITER.menu)[1]);
       return acc + count;
     }, 0);
-    const isValid = this.#menu.isCntUnderMax(menuCount);
+    const isValid = menu.isCntUnderMax(menuCount);
     if (!isValid) {
       this.throwMenuError();
     }
@@ -106,7 +100,7 @@ export default class InputValidator {
 
   // 1-2-6. 음료만 주문할 수 없다.
   isOnlyDrink(orders) {
-    const isValid = this.#menu.isOnlyDrink(orders);
+    const isValid = menu.isOnlyDrink(orders);
     if (!isValid) {
       this.throwMenuError();
     }
