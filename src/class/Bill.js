@@ -1,6 +1,6 @@
 import { DATE, EVENT, BENEFIT_TYPE, BENEFIT, BENEFIT_EMPTY_CASE } from "../constants/constant.js";
 import { BADGE_THRESHOLD } from "../constants/badge.js";
-import { getDay, isWeekend, isWeekday, isSpecial } from "../util/date.js";
+import { isWeekend, isWeekday, isSpecial } from "../util/date.js";
 
 import menu from "./Menu.js";
 import Badge from "./Badge.js";
@@ -23,69 +23,68 @@ class Bill {
   }
 
   // 이벤트 대상인지 확인한다. 총주문 금액이 10,000원 이상이면 이벤트 대상이다.
-  isEventTarget(totalPrice) {
+  #isEventTarget() {
+    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice();
     return totalPrice >= EVENT.priceThreshold;
   }
 
   // 이벤트 대상인지 확인한다. 주문을 토대로 한 총주문 금액이 10,000원 이상이면 이벤트 대상이다.
-  isOrderEventTarget(orders) {
-    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice(orders);
-    return this.isEventTarget(totalPrice);
+  #isOrderEventTarget() {
+    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice();
+    return this.#isEventTarget(totalPrice);
   }
 
   // 크리스마스 디데이 할인 이벤트 기간인지 확인한다. 기간은 1일부터 25일까지이다.
-  isChristmasEventTarget(visitDate) {
+  #isChristmasEventTarget() {
+    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice();
+    if (!this.#isEventTarget(totalPrice)) return false;
+    const { visitDate } = this.#result;
     return visitDate >= DATE.dday.start && visitDate <= DATE.dday.end;
   }
 
   // 방문 날짜와 주문 메뉴를 토대로 필요한 정보를 계산한다.
   calculateBill() {
-    const { visitDate, orders } = this.#result;
-    const totalPrice = this.calculateTotalPrice(orders);
+    const totalPrice = this.calculateTotalPrice();
     this.#result.totalPrice = totalPrice;
     // 2-1-1. 총주문 금액 10,000원 이상부터 이벤트를 적용한다. 아닌 경우 바로 `2-6`을 실행한다.
-    if (this.isEventTarget(totalPrice)) {
-      this.#result.giveAway = this.calculateGiveAway(orders);
-      this.#result.benefits = this.calculateBenefits(visitDate, orders);
-      this.#result.benefitAmount = this.calculateBenefitAmount(visitDate, orders);
-      this.#result.badge = this.createBadge(visitDate, orders);
+    if (this.#isEventTarget()) {
+      this.#result.giveAway = this.calculateGiveAway();
+      this.#result.benefits = this.calculateBenefits();
+      this.#result.benefitAmount = this.calculateBenefitAmount();
+      this.#result.badge = this.createBadge();
     }
-    this.#result.finalPrice = this.calculateFinalPrice(visitDate, orders);
+    this.#result.finalPrice = this.calculateFinalPrice();
     return this.#result;
   }
 
   // 2-1. 할인 전 총주문 금액을 계산한다.
-  calculateTotalPrice(orders) {
-    return orders.reduce((acc, order) => {
+  calculateTotalPrice() {
+    return this.#result.orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
       return acc + menu.getMenuPrice(menuName) * menuAmount;
     }, 0);
   }
 
   // 2-2. 총주문 금액이 12만 원 이상이면 증정 이벤트를 진행한다.
-  calculateGiveAway(orders) {
-    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice(orders);
+  calculateGiveAway() {
+    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice();
     return totalPrice >= BENEFIT.giveAway.threshold;
   }
 
   // 2-3. 혜택 내역을 계산한다.
-  calculateBenefits(visitDate, orders) {
-    if (!this.isOrderEventTarget(orders)) return BENEFIT_EMPTY_CASE.benefits;
-    return this.calculateAllBenefits(visitDate, orders);
-  }
-
-  // 모든 혜택 내역을 계산한다.
-  calculateAllBenefits(visitDate, orders) {
-    const christmasBenefit = this.calculateChristmasBenefit(visitDate);
-    const dayBenefit = this.calculateDayBenefit(visitDate, orders);
-    const specialBenefit = this.calculateSpecialBenefit(visitDate);
-    const giveAwayBenefit = this.calculateGiveAwayBenefit(orders);
+  calculateBenefits() {
+    if (!this.#isOrderEventTarget()) return BENEFIT_EMPTY_CASE.benefits;
+    const christmasBenefit = this.calculateChristmasBenefit();
+    const dayBenefit = this.calculateDayBenefit();
+    const specialBenefit = this.calculateSpecialBenefit();
+    const giveAwayBenefit = this.calculateGiveAwayBenefit();
     return [christmasBenefit, dayBenefit, specialBenefit, giveAwayBenefit].filter((benefit) => Object.keys(benefit).length !== 0);
   }
 
   // 2-3-1. 크리스마스 디데이 할인 금액을 계산한다.
-  calculateChristmasBenefit(visitDate) {
-    if (!this.isChristmasEventTarget(visitDate)) return BENEFIT_EMPTY_CASE.christmasBenefit;
+  calculateChristmasBenefit() {
+    if (!this.#isChristmasEventTarget()) return BENEFIT_EMPTY_CASE.christmasBenefit;
+    const { visitDate } = this.#result;
     return {
       name: BENEFIT.christmas.name,
       type: BENEFIT.christmas.type,
@@ -94,21 +93,22 @@ class Bill {
   }
 
   // 2-3-2. 요일에 따라 평일, 주말 할인 금액을 계산한다.
-  calculateDayBenefit(visitDate, orders) {
-    const day = getDay(visitDate);
-    if (isWeekday(day)) {
-      return this.calculateWeekDayBenefits(visitDate, orders);
+  calculateDayBenefit() {
+    const { visitDate } = this.#result;
+    if (isWeekday(visitDate)) {
+      return this.calculateWeekDayBenefits();
     }
-    if (isWeekend(day)) {
-      return this.calculateWeekEndBenefits(visitDate, orders);
+    if (isWeekend(visitDate)) {
+      return this.calculateWeekEndBenefits();
     }
     return BENEFIT_EMPTY_CASE.dayBenefit;
   }
 
   // 평일 할인 금액을 계산한다.
-  calculateWeekDayBenefits(visitDate, orders) {
-    if (!isWeekday(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.benefit;
-    const discountNumber = this.calculateWeekDayDiscountNumber(visitDate, orders);
+  calculateWeekDayBenefits() {
+    const { visitDate } = this.#result;
+    if (!isWeekday(visitDate)) return BENEFIT_EMPTY_CASE.weekDay.benefit;
+    const discountNumber = this.calculateWeekDayDiscountNumber();
     if (!discountNumber) return BENEFIT_EMPTY_CASE.weekDay.benefit;
     return {
       name: BENEFIT.weekDay.name,
@@ -117,8 +117,10 @@ class Bill {
     };
   }
 
-  calculateWeekDayDiscountNumber(visitDate, orders) {
-    if (!isWeekday(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekDay.discountNumber;
+  // 평일 할인 적용 가능한 메뉴의 갯수를 계산한다.
+  calculateWeekDayDiscountNumber() {
+    const { visitDate, orders } = this.#result;
+    if (!isWeekday(visitDate)) return BENEFIT_EMPTY_CASE.weekDay.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
       if (menu.getMenuType(menuName) === BENEFIT.weekDay.menuType) {
@@ -129,9 +131,10 @@ class Bill {
   }
 
   // 주말 할인 금액을 계산한다.
-  calculateWeekEndBenefits(visitDate, orders) {
-    if (!isWeekend(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
-    const discountNumber = this.calculateWeekEndDiscountNumber(visitDate, orders);
+  calculateWeekEndBenefits() {
+    const { visitDate } = this.#result;
+    if (!isWeekend(visitDate)) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
+    const discountNumber = this.calculateWeekEndDiscountNumber();
     if (!discountNumber) return BENEFIT_EMPTY_CASE.weekEnd.benefit;
     return {
       name: BENEFIT.weekEnd.name,
@@ -140,8 +143,10 @@ class Bill {
     };
   }
 
-  calculateWeekEndDiscountNumber(visitDate, orders) {
-    if (!isWeekend(getDay(visitDate))) return BENEFIT_EMPTY_CASE.weekEnd.discountNumber;
+  // 주말 할인 적용 가능한 갯수를 계산한다.
+  calculateWeekEndDiscountNumber() {
+    const { visitDate, orders } = this.#result;
+    if (!isWeekend(visitDate)) return BENEFIT_EMPTY_CASE.weekEnd.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
       if (menu.getMenuType(menuName) === BENEFIT.weekEnd.menuType) {
@@ -152,7 +157,8 @@ class Bill {
   }
 
   // 2-3-3. 특별 할인 금액을 계산한다.
-  calculateSpecialBenefit(visitDate) {
+  calculateSpecialBenefit() {
+    const { visitDate } = this.#result;
     if (!isSpecial(visitDate)) return BENEFIT_EMPTY_CASE.specialBenefit;
     return {
       name: BENEFIT.special.name,
@@ -162,8 +168,8 @@ class Bill {
   }
 
   // 2-3-4. 증정 메뉴 금액을 계산한다.
-  calculateGiveAwayBenefit(orders) {
-    const giveAway = this.#result.giveAway || this.calculateGiveAway(orders);
+  calculateGiveAwayBenefit() {
+    const giveAway = this.#result.giveAway || this.calculateGiveAway();
     if (!giveAway) return BENEFIT_EMPTY_CASE.giveAwayBenefit;
     const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
     return {
@@ -174,17 +180,17 @@ class Bill {
   }
 
   // 2-4. 총혜택 금액을 계산한다.
-  calculateBenefitAmount(visitDate, orders) {
-    if (!this.isOrderEventTarget(orders)) return BENEFIT_EMPTY_CASE.benefitAmount.total;
-    const benefitDiscount = this.calculateBenefitDiscount(visitDate, orders);
-    const benefitGiveAway = this.calculateBenefitGiveAway(orders);
-    return benefitDiscount + benefitGiveAway;
+  calculateBenefitAmount() {
+    if (!this.#isOrderEventTarget()) return BENEFIT_EMPTY_CASE.benefitAmount.total;
+    const totalDiscount = this.calculateTotalDiscount();
+    const giveAwayPrice = this.calculateGiveAwayPrice();
+    return totalDiscount + giveAwayPrice;
   }
 
   // 2-4-1. 할인 금액의 합계를 계산한다
-  calculateBenefitDiscount(visitDate, orders) {
-    if (!this.isOrderEventTarget(orders)) return BENEFIT_EMPTY_CASE.benefitAmount.discount;
-    const benefits = this.#result.benefits || this.calculateBenefits(visitDate, orders);
+  calculateTotalDiscount() {
+    if (!this.#isOrderEventTarget()) return BENEFIT_EMPTY_CASE.benefitAmount.discount;
+    const benefits = this.#result.benefits || this.calculateBenefits();
     return benefits.reduce((acc, benefit) => {
       const { type, discount } = benefit;
       if (type === BENEFIT_TYPE.discount) {
@@ -195,28 +201,29 @@ class Bill {
   }
 
   // 2-4-2. 증정 이벤트 여부에 따라 증정 메뉴의 가격을 계산한다.
-  calculateBenefitGiveAway(orders) {
-    if (!this.isOrderEventTarget(orders)) return BENEFIT_EMPTY_CASE.benefitAmount.giveAway;
-    const giveAway = this.#result.giveAway || this.calculateGiveAway(orders);
+  calculateGiveAwayPrice() {
+    if (!this.#isOrderEventTarget()) return BENEFIT_EMPTY_CASE.benefitAmount.giveAway;
+    const giveAway = this.#result.giveAway || this.calculateGiveAway();
     if (!giveAway) return 0;
     const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
     return giveAwayMenuPrice;
   }
 
   // 2-5. 총혜택 금액에 따라 이벤트 뱃지를 부여한다.
-  createBadge(visitDate, orders) {
+  createBadge() {
     // 이벤트 대상이 아니거나
-    if (!this.isOrderEventTarget(orders)) return '';
-    const benefitAmount = this.#result.benefitAmount || this.calculateBenefitAmount(visitDate, orders);
+    if (!this.#isOrderEventTarget()) return '';
+    const benefitAmount = this.#result.benefitAmount || this.calculateBenefitAmount();
     // 총혜택 금액이 5,000원(뱃지를 받기 위한 최소 금액) 미만이면 뱃지를 부여하지 않는다.
     if (benefitAmount < BADGE_THRESHOLD.star) return '';
-    return new Badge(benefitAmount);
+    const badge = new Badge(benefitAmount);
+    return badge.getInfo();
   }
 
   // 2-6. 할인 후 예상 결제 금액을 계산한다.
-  calculateFinalPrice(visitDate, orders) {
-    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice(orders);
-    const benefitDiscount = this.calculateBenefitDiscount(visitDate, orders);
+  calculateFinalPrice() {
+    const totalPrice = this.#result.totalPrice || this.calculateTotalPrice();
+    const benefitDiscount = this.calculateTotalDiscount();
     const finalPrice = totalPrice - benefitDiscount;
     return finalPrice;
   }
