@@ -62,6 +62,28 @@ export const BENEFIT = {
   },
 };
 
+export const BENEFIT_EMPTY_CASE = {
+  benefits: [],
+  christmasBenefit: {},
+  dayBenefit: {},
+  weekDay: {
+    benefit: {},
+    discountNumber: 0,
+  },
+  weekEnd: {
+    benefit: {},
+    discountNumber: 0,
+  },
+  specialBenefit: {},
+  giveAwayBenefit: {},
+  benefitAmount: {
+    total: 0,
+    discount: 0,
+    giveAway: 0,
+  },
+  badge: '',
+};
+
 export const BADGE = {
   santa: {
     name: "산타",
