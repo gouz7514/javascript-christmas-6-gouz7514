@@ -165,7 +165,7 @@ class Bill {
   calculateGiveAwayBenefit(orders) {
     const giveAway = this.#result.giveAway || this.calculateGiveAway(orders);
     if (!giveAway) return BENEFIT_EMPTY_CASE.giveAwayBenefit;
-    const { price: giveAwayMenuPrice } = menu.getGiveAwaymenuInfo();
+    const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
     return {
       name: BENEFIT.giveAway.name,
       type: BENEFIT.giveAway.type,
@@ -199,7 +199,7 @@ class Bill {
     if (!this.isOrderEventTarget(orders)) return BENEFIT_EMPTY_CASE.benefitAmount.giveAway;
     const giveAway = this.#result.giveAway || this.calculateGiveAway(orders);
     if (!giveAway) return 0;
-    const { price: giveAwayMenuPrice } = menu.getGiveAwaymenuInfo();
+    const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
     return giveAwayMenuPrice;
   }
 
