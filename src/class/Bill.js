@@ -181,7 +181,7 @@ class Bill {
 
   // 2-4-1. 할인 금액의 합계를 계산한다
   #calculateBenefitDiscount(visitDate, orders) {
-    const benefits = this.#calculateBenefits(visitDate, orders);
+    const benefits = this.#result.benefits || this.#calculateBenefits(visitDate, orders);
     return benefits.reduce((acc, benefit) => {
       const { type, discount } = benefit;
       if (type === BENEFIT_TYPE.discount) {
@@ -202,7 +202,7 @@ class Bill {
   #createBadge(visitDate, orders) {
     // 이벤트 대상이 아니거나
     if (!this.#isOrderEventTarget(orders)) return '';
-    const benefitAmount = this.#calculateBenefitAmount(visitDate, orders);
+    const benefitAmount = this.#result.benefitAmount || this.#calculateBenefitAmount(visitDate, orders);
     // 총혜택 금액이 5,000원(뱃지를 받기 위한 최소 금액) 미만이면 뱃지를 부여하지 않는다.
     if (benefitAmount < BADGE_THRESHOLD.star) return '';
     return new Badge(benefitAmount);
