@@ -3,8 +3,21 @@ import OutputView from "./OutputView.js";
 import InputValidator from "./validator/inputValidator.js";
 
 import Bill from "./class/Bill.js";
+import Menu from "./class/Menu.js";
 
 class App {
+  #menu;
+  #inputValidator;
+
+  constructor() {
+    this.#menu = new Menu();
+    this.initilizeInputValidator();
+  }
+
+  initilizeInputValidator() {
+    this.#inputValidator = new InputValidator(this.#menu);
+  }
+
   async run() {
     OutputView.startOrder();
     try {
@@ -21,7 +34,7 @@ class App {
   // 1-1. 고객의 식당 예상 방문 날짜를 입력받는다.
   async getVisitDate() {
     try {
-      const date = InputValidator.validateVisitDate(await InputView.getVisitDate());
+      const date = this.#inputValidator.validateVisitDate(await InputView.getVisitDate());
       return Number(date);
     } catch (error) {
       OutputView.printError(error.message);
@@ -32,7 +45,7 @@ class App {
   // 1-2. 고객의 메뉴를 입력받는다.
   async getOrders() {
     try {
-      const orders = InputValidator.validateOrders(await InputView.getOrders());
+      const orders = this.#inputValidator.validateOrders(await InputView.getOrders());
       return orders;
     } catch (error) {
       OutputView.printError(error.message);
