@@ -1,4 +1,14 @@
-import { MENU_TYPE, MENU, MENU_GIVEAWAY } from "./menu.js";
+import { MENU_TYPE } from "./menu.js";
+
+export const DAY = {
+  sun: 0,
+  mon: 1,
+  tue: 2,
+  wed: 3,
+  thu: 4,
+  fri: 5,
+  sat: 6,
+};
 
 export const DATE = {
   start: 1,
@@ -7,22 +17,21 @@ export const DATE = {
     start: 1,
     end: 25,
   },
-  weekDay: [0, 1, 2, 3, 4],
-  weekend: [5, 6],
+  weekDay: [DAY.mon, DAY.tue, DAY.wed, DAY.thu, DAY.fri],
+  weekend: [DAY.sun, DAY.sat],
   special: [3, 10, 17, 24, 25, 31],
 };
 
 export const EVENT = {
   year: 2023,
   month: 12,
+  priceThreshold: 10000,
 };
 
 export const BENEFIT_TYPE = {
   discount: 'discount',
   event: 'event',
 };
-
-export const BENEFIT_THRESHOLD = 10000;
 
 export const BENEFIT = {
   christmas: {
@@ -56,10 +65,30 @@ export const BENEFIT = {
     name: 'giveAway',
     name_ko: '증정 이벤트',
     type: BENEFIT_TYPE.event,
-    discount: MENU[MENU_GIVEAWAY].price,
-    menu: MENU_GIVEAWAY,
-    amount: 1,
+    threshold: 120000,
   },
+};
+
+export const BENEFIT_EMPTY_CASE = {
+  benefits: [],
+  christmasBenefit: {},
+  dayBenefit: {},
+  weekDay: {
+    benefit: {},
+    discountNumber: 0,
+  },
+  weekEnd: {
+    benefit: {},
+    discountNumber: 0,
+  },
+  specialBenefit: {},
+  giveAwayBenefit: {},
+  benefitAmount: {
+    total: 0,
+    discount: 0,
+    giveAway: 0,
+  },
+  badge: '',
 };
 
 export const BADGE = {
