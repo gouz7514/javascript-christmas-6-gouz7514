@@ -28,7 +28,7 @@ class App {
   async getVisitDate() {
     try {
       const date = this.#inputValidator.validateVisitDate(await InputView.getVisitDate());
-      return Number(date);
+      return date;
     } catch (error) {
       OutputView.printError(error.message);
       return this.getVisitDate();

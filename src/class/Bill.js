@@ -1,6 +1,5 @@
 import { DATE, EVENT, BENEFIT_TYPE, BENEFIT, BENEFIT_EMPTY_CASE } from "../constants/constant.js";
 import { BADGE_THRESHOLD } from "../constants/badge.js";
-import { orderToArray } from "../util/order.js";
 import { getDay, isWeekend, isWeekday, isSpecial } from "../util/date.js";
 
 import menu from "./Menu.js";
@@ -20,7 +19,7 @@ class Bill {
 
   constructor(visitDate, orders) {
     this.#result.visitDate = visitDate;
-    this.#result.orders = orderToArray(orders);
+    this.#result.orders = orders;
   }
 
   // 이벤트 대상인지 확인한다. 총주문 금액이 10,000원 이상이면 이벤트 대상이다.
