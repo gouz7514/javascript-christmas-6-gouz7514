@@ -108,8 +108,7 @@ class Bill {
 
   // 평일 할인 금액을 계산한다.
   #calculateWeekDayBenefits(visitDate, orders) {
-    const day = getDay(visitDate);
-    if (!DATE.weekDay.includes(day)) return {};
+    if (!DATE.weekDay.includes(getDay(visitDate))) return {};
     const discountNumber = this.#calculateWeekDayDiscountNumber(visitDate, orders);
     return {
       name: BENEFIT.weekDay.name,
@@ -119,8 +118,7 @@ class Bill {
   }
 
   #calculateWeekDayDiscountNumber(visitDate, orders) {
-    const day = getDay(visitDate);
-    if (!DATE.weekDay.includes(day)) return 0;
+    if (!DATE.weekDay.includes(getDay(visitDate))) return 0;
     return orders.reduce((acc, order) => {
       const { menu, amount } = order;
       if (MENU[menu].type === BENEFIT.weekDay.menuType) {
@@ -132,8 +130,7 @@ class Bill {
 
   // 주말 할인 금액을 계산한다.
   #calculateWeekEndBenefits(visitDate, orders) {
-    const day = getDay(visitDate);
-    if (!DATE.weekend.includes(day)) return {};
+    if (!DATE.weekend.includes(getDay(visitDate))) return {};
     const discountNumber = this.#calculateWeekEndDiscountNumber(visitDate, orders);
     return {
       name: BENEFIT.weekEnd.name,
@@ -143,8 +140,7 @@ class Bill {
   }
 
   #calculateWeekEndDiscountNumber(visitDate, orders) {
-    const day = getDay(visitDate);
-    if (!DATE.weekend.includes(day)) return 0;
+    if (!DATE.weekend.includes(getDay(visitDate))) return 0;
     return orders.reduce((acc, order) => {
       const { menu, amount } = order;
       if (MENU[menu].type === BENEFIT.weekEnd.menuType) {
@@ -166,7 +162,7 @@ class Bill {
 
   // 2-3-4. 증정 메뉴 금액을 계산한다.
   #calculateGiveAwayBenefit(orders) {
-    const giveAway = this.#calculateGiveAway(orders);
+    const giveAway = this.#result.giveAway || this.#calculateGiveAway(orders);
     if (!giveAway) return {};
     return {
       name: BENEFIT.giveAway.name,
@@ -197,7 +193,7 @@ class Bill {
 
   // 2-4-2. 증정 이벤트 여부에 따라 증정 메뉴의 가격을 계산한다.
   #calculateBenefitGiveAway(orders) {
-    const giveAway = this.#calculateGiveAway(orders);
+    const giveAway = this.#result.giveAway || this.#calculateGiveAway(orders);
     if (!giveAway) return 0;
     return BENEFIT.giveAway.discount;
   }
