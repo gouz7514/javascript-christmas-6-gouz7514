@@ -46,7 +46,7 @@ const OutputView = {
   // 3-4. 혜택 내역을 출력한다.
   printBenefits(benefits) {
     Console.print(OUTPUT.printBenefits);
-    if (!benefits.length) {
+    if (!benefits || !benefits.length) {
       Console.print(EMPTY_CASE.benefits);
       return;
     }
