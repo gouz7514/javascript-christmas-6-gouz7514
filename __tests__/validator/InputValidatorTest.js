@@ -1,13 +1,11 @@
-import InputValidator from "../../src/validator/inputValidator.js";
+import InputValidator from "../../src/validator/InputValidator.js";
 
-describe("inputValidator 테스트", () => {
-  const inputValidator = new InputValidator();
-
+describe("InputValidator 테스트", () => {
   describe("유닛 테스트", () => {
     describe("고객의 식당 예상 방문 날짜에 대해 검증한다.", () => {
       describe("(요구사항 1-1-1) - 입력값은 숫자여야 한다.", () => {
         test("숫자가 아닐 경우 예외를 발생시킨다", () => {
-          expect(() => inputValidator.isNumber("a")).toThrow("[ERROR]");
+          expect(() => InputValidator.isNumber("a")).toThrow("[ERROR]");
         });
       });
     
@@ -15,7 +13,7 @@ describe("inputValidator 테스트", () => {
         test("1 이상 31 이하의 숫자가 아닐 경우 예외를 발생시킨다", () => {
           const dateArray = [0, 32];
           dateArray.forEach((date) => {
-            expect(() => inputValidator.isValidDate(date)).toThrow("[ERROR]");
+            expect(() => InputValidator.isValidDate(date)).toThrow("[ERROR]");
           });
         });
       });
@@ -26,26 +24,26 @@ describe("inputValidator 테스트", () => {
         test("메뉴 형식에 맞지 않을 경우 예외를 발생시킨다", () => {
           const orderArray = [["티본스테이크1"], ["티본스테이크-1", "타파스4"]];
           orderArray.forEach((order) => {
-            expect(() => inputValidator.isValidOrderFormat(order)).toThrow("[ERROR]");
+            expect(() => InputValidator.isValidOrderFormat(order)).toThrow("[ERROR]");
           });
         });
       });
     
       describe("(요구사항 1-2-2) - 메뉴판에 있는 메뉴여야만 한다.", () => {
         test("메뉴판에 없는 메뉴일 경우 예외를 발생시킨다", () => {
-          expect(() => inputValidator.isValidOrder(["없는메뉴-1"])).toThrow("[ERROR]");
+          expect(() => InputValidator.isValidOrder(["없는메뉴-1"])).toThrow("[ERROR]");
         });
       });
     
       describe("(요구사항 1-2-3) - 메뉴의 개수는 1 이상의 숫자여야만 한다.", () => {
         test("메뉴의 개수가 1개 이상이 아닌 경우 예외를 발생시킨다", () => {
-          expect(() => inputValidator.isValidMenuCount(["티본스테이크-0"])).toThrow("[ERROR]");
+          expect(() => InputValidator.isValidMenuCount(["티본스테이크-0"])).toThrow("[ERROR]");
         });
       });
     
       describe("(요구사항 1-2-4) - 중복 메뉴는 허용하지 않는다.", () => {
         test("주문한 메뉴가 중복될 경우 예외를 발생시킨다", () => {
-          expect(() => inputValidator.isMenuRepeat(["티본스테이크-1", "티본스테이크-1"])).toThrow("[ERROR]");
+          expect(() => InputValidator.isMenuRepeat(["티본스테이크-1", "티본스테이크-1"])).toThrow("[ERROR]");
         });
       });
     
@@ -56,7 +54,7 @@ describe("inputValidator 테스트", () => {
             ["타파스-5", "바비큐립-5", "초코케이크-5", "제로콜라-6"]
           ];
           orderArray.forEach((order) => {
-            expect(() => inputValidator.isMenuCountOver(order)).toThrow("[ERROR]");
+            expect(() => InputValidator.isMenuCountOver(order)).toThrow("[ERROR]");
           });
         });
       });
@@ -68,7 +66,7 @@ describe("inputValidator 테스트", () => {
             ["제로콜라-5", "레드와인-4", "샴페인-3"]
           ];
           orderArray.forEach((order) => {
-            expect(() => inputValidator.isOnlyDrink(order)).toThrow("[ERROR]");
+            expect(() => InputValidator.isOnlyDrink(order)).toThrow("[ERROR]");
           });
         });
       });
@@ -81,7 +79,7 @@ describe("inputValidator 테스트", () => {
       test("방문 날짜가 1 이상 31 이하의 숫자일 경우 숫자로 변환하여 반환한다", () => {
         const dateArray = [1, 31];
         dateArray.forEach((date) => {
-          const result = inputValidator.validateVisitDate(date);
+          const result = InputValidator.validateVisitDate(date);
           expect(result).toBe(date);
         });
       });
@@ -89,7 +87,7 @@ describe("inputValidator 테스트", () => {
       test("방문 날짜가 1 이상 31 이하의 숫자가 아닐 경우 예외를 발생시킨다", () => {
         const dateArray = [0, 32, "a", -2];
         dateArray.forEach((date) => {
-          expect(() => inputValidator.validateVisitDate(date)).toThrow("[ERROR]");
+          expect(() => InputValidator.validateVisitDate(date)).toThrow("[ERROR]");
         });
       });
     });
@@ -97,7 +95,7 @@ describe("inputValidator 테스트", () => {
     describe("주문 메뉴를 검증한다.", () => {
       test("모든 유닛 테스트를 통과할 경우 주문 메뉴를 객체로 변환하여 반환한다", () => {
         const orders = "티본스테이크-1,타파스-4,바비큐립-3,초코케이크-2";
-        const result = inputValidator.validateOrders(orders);
+        const result = InputValidator.validateOrders(orders);
         expect(result).toEqual([
           { menu: "티본스테이크", amount: 1 },
           { menu: "타파스", amount: 4 },
@@ -116,7 +114,7 @@ describe("inputValidator 테스트", () => {
           "제로콜라-5"
         ]
         orders.forEach((order) => {
-          expect(() => inputValidator.validateOrders(order)).toThrow("[ERROR]");
+          expect(() => InputValidator.validateOrders(order)).toThrow("[ERROR]");
         });
       });
     });
