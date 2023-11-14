@@ -217,7 +217,7 @@ class Bill {
     // 총혜택 금액이 5,000원(뱃지를 받기 위한 최소 금액) 미만이면 뱃지를 부여하지 않는다.
     if (benefitAmount < BADGE_THRESHOLD.star) return '';
     const badge = new Badge(benefitAmount);
-    return badge.getInfo();
+    return badge;
   }
 
   // 2-6. 할인 후 예상 결제 금액을 계산한다.
