@@ -26,7 +26,7 @@ const richBill = new Bill(DATE.example, richOrders);
 const poorBill = new Bill(DATE.example, poorOrders);
 
 describe("Bill 클래스 테스트", () => {
-  describe("총주문 금액 계산 테스트", () => {
+  describe("(요구사항 2-1) - 할인 전 총주문 금액을 계산한다.", () => {
     test("총주문 금액을 반환한다.", () => {
       const expected = 142000;
       const result = richBill.calculateTotalPrice();
@@ -43,7 +43,27 @@ describe("Bill 클래스 테스트", () => {
     });
   });
 
-  describe("증정 이벤트 여부 계산 테스트", () => {
+  describe("(요구사항 2-1-1) - 총주문 금액이 10,000원 미만이면 이벤트를 적용하지 않는다",() => {
+    test("10,000원 미만 주문 시 이벤트 대상이 아니다.", () => {
+      const expected = {
+        visitDate: 3,
+        orders: [
+          { menu: "타파스", amount: 1 },
+          { menu: "제로콜라", amount: 1 },
+        ],
+        totalPrice: 8500,
+        giveAway: false,
+        benefits: null,
+        benefitAmount: 0,
+        badge: '',
+        finalPrice: 8500,
+      };
+      const result = poorBill.calculateBill();
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe("(요구사항 2-2) - 증정 이벤트 여부를 계산한다", () => {
     test("총주문 금액이 12만 원 이상일 경우 true를 반환한다.", () => {
       const result = richBill.calculateGiveAway();
       expect(result).toBeTruthy();
@@ -55,7 +75,7 @@ describe("Bill 클래스 테스트", () => {
     });
   });
 
-  describe("혜택 내역 계산 테스트", () => {
+  describe("(요구사항 2-3) - 혜택 내역을 계산한다.", () => {
     let weekDayBill;
     let weekEndBill;
 
@@ -70,7 +90,7 @@ describe("Bill 클래스 테스트", () => {
       expect(result).toEqual(expected);
     });
 
-    describe("크리스마스 디데이 할인 금액 계산 메소드 테스트", () => {
+    describe("(요구사항 2-3-1) - 크리스마스 디데이 할인 금액을 계산한다.", () => {
       test("이벤트 기간(1일 ~ 25일)인 경우 디데이 할인 금액을 담은 객체를 반환한다.", () => {
         const bill = new Bill(DATE.christmas, richOrders);
         const expected = {
@@ -90,75 +110,78 @@ describe("Bill 클래스 테스트", () => {
       });
     });
 
-    describe("평일의 경우 할인 금액을 계산한다.", () => {
-      describe("평일 할인 적용 가능 메뉴 갯수를 계산한다.", () => {
-        test("평일인 경우 적용 가능한 메뉴의 갯수를 반환한다.", () => {
-          const expected = 2;
-          const result = weekDayBill.calculateWeekDayDiscountNumber();
-          expect(result).toEqual(expected);
+    describe("(요구사항 2-3-2) - 요일에 따라 평일, 주말 할인 금액을 계산한다", () => {
+      describe("평일의 경우 할인 금액을 계산한다.", () => {
+        describe("평일 할인 적용 가능 메뉴 갯수를 계산한다.", () => {
+          test("평일인 경우 적용 가능한 메뉴의 갯수를 반환한다.", () => {
+            const expected = 2;
+            const result = weekDayBill.calculateWeekDayDiscountNumber();
+            expect(result).toEqual(expected);
+          });
+  
+          test("평일이 아닌 경우 0을 반환한다", () => {
+            const expected = 0;
+            const result = weekEndBill.calculateWeekDayDiscountNumber();
+            expect(result).toEqual(expected);
+          });
         });
-
-        test("평일이 아닌 경우 0을 반환한다", () => {
-          const expected = 0;
-          const result = weekEndBill.calculateWeekDayDiscountNumber();
-          expect(result).toEqual(expected);
+  
+        describe("평일 할인 금액을 계산한다.", () => {
+          test("평일인 경우 할인 금액을 반환한다.", () => {
+            const expected = {
+              name: 'weekDay',
+              type: 'discount',
+              discount: 4046,
+            };
+            const result = weekDayBill.calculateWeekDayBenefits();
+            expect(result).toEqual(expected);
+          });
+  
+          test("평일이 아닌 경우 빈 객체를 반환한다.", () => {
+            const expected = {};
+            const result = weekEndBill.calculateWeekDayBenefits();
+            expect(result).toEqual(expected);
+          });
         });
       });
-
-      describe("평일 할인 금액을 계산한다.", () => {
-        test("평일인 경우 할인 금액을 반환한다.", () => {
-          const expected = {
-            name: 'weekDay',
-            type: 'discount',
-            discount: 4046,
-          };
-          const result = weekDayBill.calculateWeekDayBenefits();
-          expect(result).toEqual(expected);
+  
+      describe("주말의 경우 할인 금액을 계산한다.", () => {
+        describe("주말 할인 적용 가능 메뉴 갯수를 계산한다.", () => {
+          test("주말인 경우 적용 가능한 메뉴의 갯수를 반환한다.", () => {
+            const expected = 2;
+            const result = weekEndBill.calculateWeekEndDiscountNumber();
+            expect(result).toEqual(expected);
+          });
+  
+          test("주말이 아닌 경우 0을 반환한다.", () => {
+            const expected = 0;
+            const result = weekDayBill.calculateWeekEndDiscountNumber();
+            expect(result).toEqual(expected);
+          });
         });
-
-        test("평일이 아닌 경우 빈 객체를 반환한다.", () => {
-          const expected = {};
-          const result = weekEndBill.calculateWeekDayBenefits();
-          expect(result).toEqual(expected);
+  
+        describe("주말 할인 금액을 계산한다.", () => {
+          test("주말인 경우 할인 금액을 반환한다.", () => {
+            const expected = {
+              name: 'weekEnd',
+              type: 'discount',
+              discount: 4046,
+            };
+            const result = weekEndBill.calculateWeekEndBenefits();
+            expect(result).toEqual(expected);
+          });
+  
+          test("주말이 아닌 경우 빈 객체를 반환한다.", () => {
+            const expected = {};
+            const result = weekDayBill.calculateWeekEndBenefits();
+            expect(result).toEqual(expected);
+          });
         });
       });
     });
 
-    describe("주말의 경우 할인 금액을 계산한다.", () => {
-      describe("주말 할인 적용 가능 메뉴 갯수를 계산한다.", () => {
-        test("주말인 경우 적용 가능한 메뉴의 갯수를 반환한다.", () => {
-          const expected = 2;
-          const result = weekEndBill.calculateWeekEndDiscountNumber();
-          expect(result).toEqual(expected);
-        });
 
-        test("주말이 아닌 경우 0을 반환한다.", () => {
-          const expected = 0;
-          const result = weekDayBill.calculateWeekEndDiscountNumber();
-          expect(result).toEqual(expected);
-        });
-      });
-
-      describe("주말 할인 금액을 계산한다.", () => {
-        test("주말인 경우 할인 금액을 반환한다.", () => {
-          const expected = {
-            name: 'weekEnd',
-            type: 'discount',
-            discount: 4046,
-          };
-          const result = weekEndBill.calculateWeekEndBenefits();
-          expect(result).toEqual(expected);
-        });
-
-        test("주말이 아닌 경우 빈 객체를 반환한다.", () => {
-          const expected = {};
-          const result = weekDayBill.calculateWeekEndBenefits();
-          expect(result).toEqual(expected);
-        });
-      });
-    });
-
-    describe("특별 할인 금액을 계산한다.", () => {
+    describe("(요구사항 2-3-3) - 특별 할인 금액을 계산한다.", () => {
       test("특별 할인 이벤트에 해당하는 날짜인 경우 할인 금액을 계산한다.", () => {
         const bill = new Bill(DATE.special, richOrders);
         const expected = {
@@ -178,7 +201,7 @@ describe("Bill 클래스 테스트", () => {
       });
     });
 
-    describe("증정 이벤트 금액을 계산한다.", () => {
+    describe("(요구사항 2-3-4) - 증정 이벤트 금액을 계산한다.", () => {
       test("이벤트 대상인 경우 증정 이벤트 금액을 계산한다.", () => {
         const expected = {
           name: 'giveAway',
@@ -197,27 +220,27 @@ describe("Bill 클래스 테스트", () => {
     });
   });
 
-  describe("총혜택 금액 계산 테스트", () => {
-    test("증정 이벤트 여부에 따라 증정 이벤트 금액을 계산한다.", () => {
-      const expected = 25000;
-      const result = richBill.calculateGiveAwayPrice();
-      expect(result).toBe(expected);
-    });
-
-    test("할인 금액의 합계를 계산한다.", () => {
+  describe("(요구사항 2-4) - 총혜택 금액을 계산한다.", () => {
+    test("(요구사항 2-4-1) - 할인 금액의 합계를 계산한다.", () => {
       const expected = 6246;
       const result = richBill.calculateTotalDiscount();
       expect(result).toBe(expected);
     });
 
-    test("혜택 금액을 계산한다.", () => {
+    test("(요구사항 2-4-2) - 증정 이벤트 여부에 따라 증정 이벤트 금액을 계산한다.", () => {
+      const expected = 25000;
+      const result = richBill.calculateGiveAwayPrice();
+      expect(result).toBe(expected);
+    });
+
+    test("할인 금액과 증정 이벤트 금액의 합계를 계산한다.", () => {
       const expected = 31246;
       const result = richBill.calculateBenefitAmount();
       expect(result).toBe(expected);
     });
   });
 
-  describe("이벤트 배지 부여 테스트", () => {
+  describe("(요구사항 2-5) - 이벤트 배지를 부여한다.", () => {
     describe("이벤트 대상이 아닌 경우 뱃지를 부여하지 않는다.", () => {
       test("총주문 금액이 10,000원 미만인 경우 뱃지를 부여하지 않는다.", () => {
         const expected = '';
@@ -239,7 +262,7 @@ describe("Bill 클래스 테스트", () => {
     });
   });
 
-  describe("할인 후 예상 결제 금액 계산 테스트", () => {
+  describe("(요구사항 2-6) - 할인 후 예상 결제 금액을 계산한다.", () => {
     test("할인 후 예상 결제 금액을 계산한다.", () => {
       const expected = 135754;
       const result = richBill.calculateFinalPrice();
