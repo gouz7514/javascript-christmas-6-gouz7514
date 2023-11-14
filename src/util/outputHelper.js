@@ -1,6 +1,6 @@
 import { OUTPUT, UNIT, EMPTY_CASE } from "../constants/message.js";
 import { BENEFIT } from "../constants/constant.js";
-import menu from "../class/Menu.js";
+import Menu from "../class/Menu.js";
 
 const outputHelper = {
   printBill(date) {
@@ -21,7 +21,7 @@ const outputHelper = {
       result += `\n${EMPTY_CASE.giveAway}`;
       return result;
     }
-    const { name: giveAwayMenuName, amount: giveAwayMenuAmount } = menu.getGiveAwayMenu();
+    const { name: giveAwayMenuName, amount: giveAwayMenuAmount } = Menu.getGiveAwayMenu();
     result += `\n${giveAwayMenuName} ${giveAwayMenuAmount}${UNIT.amount}`;
     return result;
   },

@@ -1,7 +1,7 @@
 import { DATE, DELIMITER } from "../constants/constant.js";
 import { ERROR } from "../constants/error.js";
 import { orderToArray } from "../util/order.js";
-import menu from "../class/Menu.js";
+import Menu from "../class/Menu.js";
 
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
 const REGEX_NUMBER = /^-?\d+(\.\d+)?$/;
@@ -56,7 +56,7 @@ export default class InputValidator {
   isValidOrder(orders) {
     orders.forEach((order) => {
       const menuName = order.split(DELIMITER.menu)[0];
-      menu.isMenuExist(menuName);
+      Menu.isMenuExist(menuName);
     });
   }
 
@@ -64,7 +64,7 @@ export default class InputValidator {
   isValidMenuCount(orders) {
     orders.forEach((order) => {
       const menuCount = order.split(DELIMITER.menu)[1];
-      const isValid = this.checkNumber(menuCount) && Number(menuCount) && menu.isCntOverMin(menuCount);
+      const isValid = this.checkNumber(menuCount) && Number(menuCount) && Menu.isCntOverMin(menuCount);
       if (!isValid) {
         this.throwMenuError();
       }
@@ -90,7 +90,7 @@ export default class InputValidator {
       const count = Number(cur.split(DELIMITER.menu)[1]);
       return acc + count;
     }, 0);
-    const isValid = menu.isCntUnderMax(menuCount);
+    const isValid = Menu.isCntUnderMax(menuCount);
     if (!isValid) {
       this.throwMenuError();
     }
@@ -98,7 +98,7 @@ export default class InputValidator {
 
   // 1-2-6. 음료만 주문할 수 없다.
   isOnlyDrink(orders) {
-    const isValid = menu.isOnlyDrink(orders);
+    const isValid = Menu.isOnlyDrink(orders);
     if (!isValid) {
       this.throwMenuError();
     }
