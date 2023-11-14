@@ -1,5 +1,6 @@
 import { DATE, DELIMITER } from "../constants/constant.js";
 import { ERROR } from "../constants/error.js";
+import { orderToArray } from "../util/order.js";
 import menu from "../class/Menu.js";
 
 const REGEX_STRING = /^[a-zA-Z가-힣]+$/;
@@ -9,18 +10,18 @@ export default class InputValidator {
   validateVisitDate(date) {
     this.isNumber(date);
     this.isValidDate(date);
-    return date;
+    return Number(date);
   }
 
   validateOrders(orders) {
-    const orderArray = orders.split(DELIMITER.order);
-    this.isValidOrderFormat(orderArray);
-    this.isValidOrder(orderArray);
-    this.isValidMenuCount(orderArray);
-    this.isMenuRepeat(orderArray);
-    this.isMenuCountOver(orderArray);
-    this.isOnlyDrink(orderArray);
-    return orders;
+    const splittedOrder = orders.split(DELIMITER.order);
+    this.isValidOrderFormat(splittedOrder);
+    this.isValidOrder(splittedOrder);
+    this.isValidMenuCount(splittedOrder);
+    this.isMenuRepeat(splittedOrder);
+    this.isMenuCountOver(splittedOrder);
+    this.isOnlyDrink(splittedOrder);
+    return orderToArray(orders);
   }
 
   // 1-1-1. 입력값은 숫자여야 한다.
@@ -66,7 +67,7 @@ export default class InputValidator {
   isValidMenuCount(orders) {
     orders.forEach((order) => {
       const menuCount = order.split(DELIMITER.menu)[1];
-      const isValid = this.checkNumber(menuCount) && Number(menuCount) >= menu.isCntOverMin(menuCount);
+      const isValid = this.checkNumber(menuCount) && Number(menuCount) && menu.isCntOverMin(menuCount);
       if (!isValid) {
         this.throwMenuError();
       }

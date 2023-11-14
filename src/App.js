@@ -28,7 +28,7 @@ class App {
   async getVisitDate() {
     try {
       const date = this.#inputValidator.validateVisitDate(await InputView.getVisitDate());
-      return Number(date);
+      return date;
     } catch (error) {
       OutputView.printError(error.message);
       return this.getVisitDate();
@@ -46,6 +46,7 @@ class App {
     }
   }
 
+  // 2. 방문 날짜와 주문 메뉴를 토대로 영수증을 생성한다.
   createBill(visitDate, orders) {
     return new Bill(visitDate, orders);
   }

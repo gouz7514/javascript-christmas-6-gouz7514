@@ -21,7 +21,7 @@ const outputHelper = {
       result += `\n${EMPTY_CASE.giveAway}`;
       return result;
     }
-    const { name: giveAwayMenuName, amount: giveAwayMenuAmount } = menu.getGiveAwaymenuInfo();
+    const { name: giveAwayMenuName, amount: giveAwayMenuAmount } = menu.getGiveAwayMenu();
     result += `\n${giveAwayMenuName} ${giveAwayMenuAmount}${UNIT.amount}`;
     return result;
   },
@@ -55,7 +55,7 @@ const outputHelper = {
       result += `\n${EMPTY_CASE.badge}`;
       return result;
     }
-    const { info: { name: badgeName } } = badge;
+    const { name: badgeName } = badge.getInfo();
     result += `\n${badgeName}`;
     return result;
   }

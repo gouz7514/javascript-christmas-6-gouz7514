@@ -27,7 +27,7 @@ class Badge {
     return "";
   }
 
-  get info() {
+  getInfo() {
     return this.#info;
   }
 }
