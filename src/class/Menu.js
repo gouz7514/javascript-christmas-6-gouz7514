@@ -62,6 +62,4 @@ class Menu {
   }
 }
 
-const menu = new Menu();
-
-export default menu;
+export default new Menu();

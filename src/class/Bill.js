@@ -2,7 +2,7 @@ import { DATE, EVENT, BENEFIT_TYPE, BENEFIT, BENEFIT_EMPTY_CASE } from "../const
 import { BADGE_THRESHOLD } from "../constants/badge.js";
 import { isWeekend, isWeekday, isSpecial } from "../util/date.js";
 
-import menu from "./Menu.js";
+import Menu from "./Menu.js";
 import Badge from "./Badge.js";
 
 class Bill {
@@ -61,7 +61,7 @@ class Bill {
   #calculateTotalPrice() {
     return this.#result.orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
-      return acc + menu.getMenuPrice(menuName) * menuAmount;
+      return acc + Menu.getMenuPrice(menuName) * menuAmount;
     }, 0);
   }
 
@@ -123,7 +123,7 @@ class Bill {
     if (!isWeekday(visitDate)) return BENEFIT_EMPTY_CASE.weekDay.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
-      if (menu.getMenuType(menuName) === BENEFIT.weekDay.menuType) {
+      if (Menu.getMenuType(menuName) === BENEFIT.weekDay.menuType) {
         return acc + menuAmount;
       }
       return acc;
@@ -149,7 +149,7 @@ class Bill {
     if (!isWeekend(visitDate)) return BENEFIT_EMPTY_CASE.weekEnd.discountNumber;
     return orders.reduce((acc, order) => {
       const { menu: menuName, amount: menuAmount } = order;
-      if (menu.getMenuType(menuName) === BENEFIT.weekEnd.menuType) {
+      if (Menu.getMenuType(menuName) === BENEFIT.weekEnd.menuType) {
         return acc + menuAmount;
       }
       return acc;
@@ -171,7 +171,7 @@ class Bill {
   #calculateGiveAwayBenefit() {
     const giveAway = this.#result.giveAway || this.#calculateGiveAway();
     if (!giveAway) return BENEFIT_EMPTY_CASE.giveAwayBenefit;
-    const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
+    const { price: giveAwayMenuPrice } = Menu.getGiveAwayMenu();
     return {
       name: BENEFIT.giveAway.name,
       type: BENEFIT.giveAway.type,
@@ -205,7 +205,7 @@ class Bill {
     if (!this.#isOrderEventTarget()) return BENEFIT_EMPTY_CASE.benefitAmount.giveAway;
     const giveAway = this.#result.giveAway || this.#calculateGiveAway();
     if (!giveAway) return 0;
-    const { price: giveAwayMenuPrice } = menu.getGiveAwayMenu();
+    const { price: giveAwayMenuPrice } = Menu.getGiveAwayMenu();
     return giveAwayMenuPrice;
   }
 
