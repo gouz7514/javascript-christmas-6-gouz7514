@@ -1,6 +1,6 @@
 # 테크 스펙
 ## 아키텍쳐
-![javascript-christmas-architecture](/javascript-christmas-6-gouz7514/docs/image/javascript-christmas-architecture.png)
+![javascript-christmas-architecture](/docs/image/javascript-christmas-architecture.png)
 
 ```
 - 사용자는 inputView를 통해 방문 날짜와 주문 정보를 입력합니다.
