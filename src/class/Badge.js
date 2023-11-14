@@ -6,15 +6,15 @@ class Badge {
   };
 
   constructor(benefitAmount) {
-    this.setBadgeInfo(benefitAmount);
+    this.#setBadgeInfo(benefitAmount);
   }
 
-  setBadgeInfo(benefitAmount) {
+  #setBadgeInfo(benefitAmount) {
     if (benefitAmount < BADGE.star.threshold) return;
-    this.#info.name = this.decideBadgeName(benefitAmount);
+    this.#info.name = this.#decideBadgeName(benefitAmount);
   }
 
-  decideBadgeName(benefitAmount) {
+  #decideBadgeName(benefitAmount) {
     if (benefitAmount >= BADGE.santa.threshold) {
       return BADGE.santa.name;
     }

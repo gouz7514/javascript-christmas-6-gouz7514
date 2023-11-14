@@ -56,10 +56,7 @@ export default class InputValidator {
   isValidOrder(orders) {
     orders.forEach((order) => {
       const menuName = order.split(DELIMITER.menu)[0];
-      const isValid = menu.isMenuExist(menuName);
-      if (!isValid) {
-        this.throwMenuError();
-      }
+      menu.isMenuExist(menuName);
     });
   }
 
