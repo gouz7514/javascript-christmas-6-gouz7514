@@ -167,7 +167,7 @@ class Bill {
     };
   }
 
-  // 2-3-4. 증정 메뉴 금액을 계산한다.
+  // 2-3-4. 증정 이벤트 금액을 계산한다.
   calculateGiveAwayBenefit() {
     const giveAway = this.#result.giveAway || this.calculateGiveAway();
     if (!giveAway) return BENEFIT_EMPTY_CASE.giveAwayBenefit;
