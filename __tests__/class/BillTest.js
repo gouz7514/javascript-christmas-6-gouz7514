@@ -218,15 +218,26 @@ describe("Bill 클래스 테스트", () => {
   });
 
   describe("이벤트 배지 부여 테스트", () => {
-    test("혜택 금액이 20,000원 이상일 경우 산타 배지를 부여한다.", () => {
-      const expected = {
-        name: '산타',
-      };
-      const result = new Bill(DATE.example, richOrders).createBadge();
-      expect(result).toEqual(expected);
+    describe("이벤트 대상이 아닌 경우 뱃지를 부여하지 않는다.", () => {
+      test("총주문 금액이 10,000원 미만인 경우 뱃지를 부여하지 않는다.", () => {
+        const expected = '';
+        const result = poorBill.createBadge();
+        expect(result).toEqual(expected);
+      });
+
+      test("총혜택 금액이 5,000원 미만인 경우 뱃지를 부여하지 않는다.", () => {
+        const visitDate = 26;
+        const orders = [
+          { menu: "초코케이크", amount: 1 },
+          { menu: "아이스크림", amount: 1 },
+        ];
+        const bill = new Bill(visitDate, orders);
+        const expected = '';
+        const result = bill.createBadge();
+        expect(result).toEqual(expected);
+      });
     });
   });
-
 
   describe("할인 후 예상 결제 금액 계산 테스트", () => {
     test("할인 후 예상 결제 금액을 계산한다.", () => {
