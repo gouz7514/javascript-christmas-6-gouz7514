@@ -50,7 +50,6 @@
  ┃ ┃ ┗ 📜OutputHelperTest.js
  ┃ ┣ 📂validator
  ┃ ┃ ┗ 📜InputValidatorTest.js
- ┃ ┣ 📜.DS_Store
  ┃ ┣ 📜ApplicationTest.js
  ┃ ┗ 📜OutputViewTest.js
  ┣ 📂docs
