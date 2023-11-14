@@ -1,9 +1,9 @@
-import { DAY, EVENT } from "../../src/constants/constant.js";
+import { DAY } from "../../src/constants/constant.js";
 import { getDay, isWeekend, isWeekday, isSpecial } from "../../src/util/date.js";
 
-describe("util/date 테스트", () => {
+describe("2023년 12월의 주어진 날짜에 대해 util/date 테스트", () => {
   describe("getDay 메소드는 주어진 날짜에 해당하는 요일을 반환한다.", () => {
-    test(`${EVENT.year}년 ${EVENT.month}월 1일은 금요일이다`, () => {
+    test("1일은 금요일이다", () => {
       const date = 1;
       const expected = DAY.fri;
       const result = getDay(date);
