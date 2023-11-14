@@ -10,6 +10,11 @@ class Menu {
     this.#menu.content = MENU;
     this.#menu.count = MENU_COUNT;
     this.#menu.giveAway = MENU_GIVEAWAY;
+
+    if (Menu.instance) {
+      throw new Error(ERROR.menuInstanceExist);
+    }
+    Menu.instance = this;
   }
 
   isMenuExist(menuName) {
@@ -60,6 +65,11 @@ class Menu {
       price: this.#menu.content[name].price,
     };
   }
+
+  getInstace() {
+    return this;
+  }
 }
 
-export default new Menu();
+const singletonMenu = Object.freeze(new Menu());
+export default singletonMenu;
