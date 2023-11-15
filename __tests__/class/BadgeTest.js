@@ -2,14 +2,9 @@ import Badge from "../../src/class/Badge.js";
 
 describe("Badge 클래스 테스트", () => {
   describe("혜택 금액에 따라 뱃지 정보를 설정한다.", () => {
-    test("혜택 금액이 0원일 경우 뱃지 정보를 설정하지 않는다.", () => {
+    test("혜택 금액이 0원일 경우 예외를 발생시킨다", () => {
       const benefitAmount = 0;
-      const badge = new Badge(benefitAmount);
-      const expected = {
-        name: '',
-      };
-      const result = badge.getInfo();
-      expect(result).toEqual(expected);
+      expect(() => new Badge(benefitAmount)).toThrow("[ERROR]");
     });
 
     test("혜택 금액이 5,000원 이상일 경우 뱃지 정보(별)를 설정한다.", () => {
