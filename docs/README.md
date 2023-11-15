@@ -3,15 +3,16 @@
 ![javascript-christmas-architecture](/docs/image/javascript-christmas-architecture.png)
 
 ```
-- 사용자는 inputView를 통해 방문 날짜와 주문 정보를 입력합니다.
-- App은 입력값을 inputValidator를 통해 검증합니다.
-- inputValidator는 입력값을 검증하고 필요한 형태로 변환해 반환합니다.
-- App은 반환된 정보를 토대로 Bill 인스턴스를 생성합니다.
-- Bill 인스턴스는 방문 날짜와 주문 정보를 저장하고 이를 토대로 이벤트 혜택을 계산합니다.
-- Bill 인스턴스는 이벤트 혜택 정보를 OutputView에게 전달합니다.
-- OutputView는 이벤트 혜택 정보를 outputHelper에게 전달합니다.
-- outputHelper는 각 이벤트 혜택 정보를 출력값 형식에 맞게 수정해 반환합니다.
-- OutputView는 반환된 값을 그대로 출력합니다.
+(1) 사용자는 InputView를 통해 방문 날짜와 주문 정보를 입력합니다.
+(2) App은 InputValidator를 통해 입력값을 검증합니다.
+(3) InputValidator는 입력값을 검증하고 필요한 형태로 변환해 반환합니다.
+(4) App은 반환된 방문 날짜와 주문 정보를 토대로 Bill 인스턴스를 생성합니다.
+(5) App은 생성된 Bill 인스턴스를 OutputView에게 전달합니다.
+(6) OutputView는 Bill 클래스에게 이벤트 혜택 정보에 대한 계산을 요청합니다.
+(7) Bill 클래스는 이벤트 혜택 정보를 계산하고 반환합니다.
+(8) OutputView는 이벤트 혜택 정보를 outputHelper에게 전달합니다.
+(9) outputHelper는 각 이벤트 혜택 정보를 출력값 형식에 맞게 수정해 반환합니다.
+(10) OutputView는 반환된 값을 그대로 출력합니다.
 ```
 
 ## 상세 설명
