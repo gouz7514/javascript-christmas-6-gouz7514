@@ -68,6 +68,113 @@ describe("기능 테스트", () => {
 
     expectLogContains(getOutput(logSpy), expected);
   });
+
+  describe("날짜에 맞는 혜택 내역 타이틀 출력", () => {
+    test("크리스마스 디데이 할인 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["25", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["크리스마스 디데이 할인"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+
+    test("평일 할인 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["6", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["평일 할인"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+  
+    test("주말 할인 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["16", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["주말 할인"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+
+    test("특별 할인 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["17", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["특별 할인"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+
+    test("증정 이벤트 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["18", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["증정 이벤트"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+
+    test("크리스마스 디데이 할인 & 주말 할인 & 증정 이벤트 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["15", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["크리스마스 디데이 할인", "주말 할인", "증정 이벤트"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+
+    test("크리스마스 디데이 할인 & 평일 할인 출력", async () => {
+      // given
+      const logSpy = getLogSpy();
+      mockQuestions(["11", "티본스테이크-1,초코케이크-3"]);
+  
+      // when
+      const app = new App();
+      await app.run();
+  
+      // then
+      const expected = ["크리스마스 디데이 할인", "평일 할인"];
+  
+      expectLogContains(getOutput(logSpy), expected);
+    });
+  });
 });
 
 describe("예외 테스트", () => {
