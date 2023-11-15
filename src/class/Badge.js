@@ -1,4 +1,5 @@
-import { BADGE } from "../constants/badge.js";
+import { BADGE, BADGE_THRESHOLD } from "../constants/badge.js";
+import { ERROR } from "../constants/error.js";
 
 class Badge {
   #info = {
@@ -10,21 +11,22 @@ class Badge {
   }
 
   #setBadgeInfo(benefitAmount) {
-    if (benefitAmount < BADGE.star.threshold) return;
+    if (benefitAmount < BADGE_THRESHOLD.star) throw new Error(ERROR.notValidBadge);
     this.#info.name = this.#decideBadgeName(benefitAmount);
   }
 
   #decideBadgeName(benefitAmount) {
-    if (benefitAmount >= BADGE.santa.threshold) {
-      return BADGE.santa.name;
+    switch (true) {
+      case benefitAmount >= BADGE_THRESHOLD.santa: {
+        return BADGE.santa.name;
+      }
+      case benefitAmount >= BADGE_THRESHOLD.tree: {
+        return BADGE.tree.name;
+      }
+      default: {
+        return BADGE.star.name;
+      }
     }
-    if (benefitAmount >= BADGE.tree.threshold) {
-      return BADGE.tree.name;
-    }
-    if (benefitAmount >= BADGE.star.threshold) {
-      return BADGE.star.name;
-    }
-    return "";
   }
 
   getInfo() {

@@ -209,12 +209,12 @@ class Bill {
     return giveAwayMenuPrice;
   }
 
-  // 2-5. 총혜택 금액에 따라 이벤트 뱃지를 부여한다.
+  // 2-5. 총혜택 금액에 따라 이벤트 배지를 부여한다.
   #createBadge() {
     // 이벤트 대상이 아니거나
     if (!this.#isOrderEventTarget()) return '';
     const benefitAmount = this.#result.benefitAmount || this.#calculateBenefitAmount();
-    // 총혜택 금액이 5,000원(뱃지를 받기 위한 최소 금액) 미만이면 뱃지를 부여하지 않는다.
+    // 총혜택 금액이 5,000원(배지를 받기 위한 최소 금액) 미만이면 배지를 부여하지 않는다.
     if (benefitAmount < BADGE_THRESHOLD.star) return '';
     const badge = new Badge(benefitAmount);
     return badge;

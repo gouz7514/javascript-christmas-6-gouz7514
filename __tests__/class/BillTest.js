@@ -213,14 +213,14 @@ describe("Bill 클래스 테스트", () => {
   });
 
   describe("(요구사항 2-5) - 이벤트 배지를 부여한다.", () => {
-    describe("이벤트 대상이 아닌 경우 뱃지를 부여하지 않는다.", () => {
-      test("총주문 금액이 10,000원 미만인 경우 뱃지를 부여하지 않는다.", () => {
+    describe("이벤트 대상이 아닌 경우 배지를 부여하지 않는다.", () => {
+      test("총주문 금액이 10,000원 미만인 경우 배지를 부여하지 않는다.", () => {
         const expected = '';
         const { badge } = poorBill.calculateBill();
         expect(badge).toEqual(expected);
       });
 
-      test("총혜택 금액이 5,000원 미만인 경우 뱃지를 부여하지 않는다.", () => {
+      test("총혜택 금액이 5,000원 미만인 경우 배지를 부여하지 않는다.", () => {
         const visitDate = 26;
         const orders = [
           { menu: "초코케이크", amount: 1 },
