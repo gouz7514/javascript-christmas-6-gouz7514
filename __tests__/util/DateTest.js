@@ -9,6 +9,11 @@ describe("2023년 12월의 주어진 날짜에 대해 util/date 테스트", () =
       const result = getDay(date);
       expect(result).toBe(expected);
     });
+
+    test("유효하지 않은 날짜일 경우 예외를 발생시킨다.", () => {
+      const date = 32;
+      expect(() => getDay(date)).toThrow("[ERROR]");
+    });
   });
 
   describe("isWeekend 메소드는 주어진 날짜가 주말인지 확인한다.", () => {

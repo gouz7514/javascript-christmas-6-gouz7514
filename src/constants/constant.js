@@ -17,8 +17,8 @@ export const DATE = {
     start: 1,
     end: 25,
   },
-  weekDay: [DAY.mon, DAY.tue, DAY.wed, DAY.thu, DAY.fri],
-  weekend: [DAY.sun, DAY.sat],
+  weekDay: [DAY.sun, DAY.mon, DAY.tue, DAY.wed, DAY.thu],
+  weekend: [DAY.fri, DAY.sat],
   special: [3, 10, 17, 24, 25, 31],
 };
 
