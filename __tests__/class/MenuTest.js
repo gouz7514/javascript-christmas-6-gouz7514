@@ -12,7 +12,7 @@ describe("Menu 클래스 테스트", () => {
       expect(result).toEqual(expected);
     });
 
-    test("메뉴가 존재하지 않을 경우 undefined를 반환한다", () => {
+    test("메뉴가 존재하지 않을 경우 예외를 발생시킨다", () => {
       const menuName = "없는메뉴";
       expect(() => Menu.isMenuExist(menuName)).toThrow("[ERROR]");
     });

@@ -10,11 +10,6 @@ class Menu {
     this.#menu.content = MENU;
     this.#menu.count = MENU_COUNT;
     this.#menu.giveAway = MENU_GIVEAWAY;
-
-    if (Menu.instance) {
-      throw new Error(ERROR.menuInstanceExist);
-    }
-    Menu.instance = this;
   }
 
   isMenuExist(menuName) {
@@ -64,10 +59,6 @@ class Menu {
       amount,
       price: this.#menu.content[name].price,
     };
-  }
-
-  getInstace() {
-    return this;
   }
 }
 

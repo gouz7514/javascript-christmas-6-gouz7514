@@ -14,7 +14,7 @@ class App {
       // 3. 최종 정보를 출력한다.
       OutputView.printBill(bill);
     } catch (error) {
-      OutputView.printError(error.message);
+      throw new Error(error.message);
     }
   }
 

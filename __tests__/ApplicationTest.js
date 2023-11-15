@@ -1,4 +1,5 @@
 import App from "../src/App.js";
+import OutputView from "../src/OutputView.js";
 import { MissionUtils } from "@woowacourse/mission-utils";
 import { EOL as LINE_SEPARATOR } from "os";
 
@@ -98,5 +99,20 @@ describe("예외 테스트", () => {
 
     // then
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining(INVALID_ORDER_MESSAGE));
+  });
+
+  test("실행 과정에서 얘기치 못한 예외 테스트", async () => {
+    jest.spyOn(OutputView, "printBill").mockImplementation(() => {
+      throw new Error("error");
+    });
+    // given
+    mockQuestions(["3", "티본스테이크-1,바비큐립-1,초코케이크-2,제로콜라-1"]);
+
+    // when
+    const app = new App();
+    await expect(app.run()).rejects.toThrow("error");
+
+    // cancel spy
+    jest.spyOn(OutputView, "printBill").mockRestore();
   });
 });
