@@ -1,6 +1,6 @@
+import { EOL as LINE_SEPARATOR } from "os";
 import outputHelper from "../../src/util/outputHelper";
 import Badge from "../../src/class/Badge.js";
-import { EOL as LINE_SEPARATOR } from "os";
 
 describe("주어진 값을 출력 메시지 형식에 맞게 변환하는 outputHelper 테스트", () => {
   test("이벤트 혜택 미리 보기 메시지 테스트", () => {
@@ -223,7 +223,7 @@ describe("주어진 값을 출력 메시지 형식에 맞게 변환하는 output
 
     test("총혜택 금액이 0원인 경우 '없음' 테스트", () => {
       // given
-      const badge = ''
+      const badge = '';
       const expected = [
         "\n<12월 이벤트 배지>",
         "없음",

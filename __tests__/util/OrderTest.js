@@ -12,4 +12,4 @@ describe("util/order 테스트", () => {
     const result = orderToArray(orders);
     expect(result).toEqual(expected);
   });
-})
+});

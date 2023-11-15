@@ -51,5 +51,5 @@ describe("2023년 12월의 주어진 날짜에 대해 util/date 테스트", () =
       const result = isSpecial(date);
       expect(result).toBe(false);
     });
-  })
-})
+  });
+});

@@ -112,7 +112,7 @@ describe("InputValidator 테스트", () => {
           "티본스테이크-1,티본스테이크-1",
           "티본스테이크-21",
           "제로콜라-5"
-        ]
+        ];
         orders.forEach((order) => {
           expect(() => InputValidator.validateOrders(order)).toThrow("[ERROR]");
         });

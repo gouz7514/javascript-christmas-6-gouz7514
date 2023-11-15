@@ -61,7 +61,7 @@ describe("이벤트 플래너 결과 출력 테스트", () => {
 
   test("(요구사항 3-2) - <할인 전 총주문 금액> 출력 테스트", () => {
     // given
-    const toalPrice = 50000
+    const toalPrice = 50000;
     const logSpy = getLogSpy();
     const expected = [
       "<할인 전 총주문 금액>",
@@ -241,5 +241,5 @@ describe("이벤트 플래너 결과 출력 테스트", () => {
     // then
     expect(logSpy).toHaveBeenCalledTimes(expected.length);
     expectLogContains(getOutput(logSpy), expected);
-  })
+  });
 });
